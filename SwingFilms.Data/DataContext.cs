@@ -13,4 +13,7 @@ public sealed class DataContext : DbContext
     
     public DbSet<User> Users { get; set; }
     public DbSet<TelegramUser> TelegramUsers { get; set; }
+    public DbSet<SpaceRoom> SpaceRooms { get; set; }
+    public DbSet<History> Histories { get; set; }
+    public DbSet<Parameter> Parameters { get; set; }
 }

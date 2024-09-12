@@ -1,11 +1,12 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Localization;
+using SwingFilms.Services.DtoModels;
 
 namespace SwingFilms.Services.Features.Identity.Commands;
 
 // TODO доделать команду и подключить
-public class RegistrationSystemCommand : IRequest
+public class RegistrationSystemCommand : IRequest<ResultDto<string>>
 {
     
 }
@@ -18,10 +19,13 @@ public class RegistrationSystemCommandValidator : AbstractValidator<Registration
     }
 }
 
-public class RegistrationSystemCommandHandler : IRequestHandler<RegistrationSystemCommand>
+public class RegistrationSystemCommandHandler : IRequestHandler<RegistrationSystemCommand, ResultDto<string>>
 {
-    public Task Handle(RegistrationSystemCommand request, CancellationToken cancellationToken)
+    public async Task<ResultDto<string>> Handle(RegistrationSystemCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        
+        
+        
+        return new ResultDto<string>("");
     }
 }

@@ -11,6 +11,7 @@ public static class RepositoryExtensions
     {
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ITelegramUserRepository, TelegramUserRepository>();
+        services.AddScoped<ISpaceRoomRepository, SpaceRoomRepository>();
     }
 
     public static void AddDatabase(this IServiceCollection services, string connectionString)

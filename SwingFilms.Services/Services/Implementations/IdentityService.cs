@@ -29,22 +29,23 @@ public class IdentityService : IIdentityService
 
     public string CreateTokenJwt(UserRole userRole, Guid userId = default, int telegramUserId = default)
     {
-        string userSid = userId != default ? userId.ToString() : telegramUserId.ToString();
+        var userSid = userId != default ? userId.ToString() : telegramUserId.ToString();
         
-        List<Claim> claims = new List<Claim> {
-            new Claim(ClaimTypes.Sid, userSid),
-            new Claim(ClaimTypes.Role, userRole.ToString())
-        };
+        List<Claim> claims =
+        [
+            new(ClaimTypes.Sid, userSid),
+            new(ClaimTypes.Role, userRole.ToString())
+        ];
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
             _configuration.GetSection("KeyTokenJWT").Value!));
 
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
         var token = new JwtSecurityToken(
             claims: claims,
             expires: DateTime.Now.AddDays(1),
-            signingCredentials: creds
+            signingCredentials: credentials
         );
 
         var jwt = new JwtSecurityTokenHandler().WriteToken(token);
