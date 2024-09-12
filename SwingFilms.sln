@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwingFilms.Web", "SwingFilms.Web\SwingFilms.Web.csproj", "{410F808C-333A-4FFC-B7F3-E81D0CD49C3F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwingFilms.Data", "SwingFilms.Data\SwingFilms.Data.csproj", "{6BFA4010-9482-4904-B5CA-6DFF787CC29A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwingFilms.Services", "SwingFilms.Services\SwingFilms.Services.csproj", "{918930DA-04A6-4C87-9BD7-FCBB88FEAA76}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{410F808C-333A-4FFC-B7F3-E81D0CD49C3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{410F808C-333A-4FFC-B7F3-E81D0CD49C3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{410F808C-333A-4FFC-B7F3-E81D0CD49C3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{410F808C-333A-4FFC-B7F3-E81D0CD49C3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BFA4010-9482-4904-B5CA-6DFF787CC29A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BFA4010-9482-4904-B5CA-6DFF787CC29A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BFA4010-9482-4904-B5CA-6DFF787CC29A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BFA4010-9482-4904-B5CA-6DFF787CC29A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{918930DA-04A6-4C87-9BD7-FCBB88FEAA76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{918930DA-04A6-4C87-9BD7-FCBB88FEAA76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{918930DA-04A6-4C87-9BD7-FCBB88FEAA76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{918930DA-04A6-4C87-9BD7-FCBB88FEAA76}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
