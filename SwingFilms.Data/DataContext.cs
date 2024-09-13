@@ -11,9 +11,23 @@ public sealed class DataContext : DbContext
         Database.EnsureCreated();
     }
     
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<User>()
+            .HasMany(x => x.Histories)
+            .WithMany(e => e.AmateurUsers)
+            .UsingEntity<UserHistory>();
+        
+        modelBuilder.Entity<User>()
+            .HasMany(x => x.SpaceRooms)
+            .WithMany(e => e.Members)
+            .UsingEntity<UserSpaceRoom>();
+
+        modelBuilder.Entity<SpaceRoom>()
+            .HasOne(x => x.Admin)
+            .WithMany(x => x.AdminSpaceRooms);
+    }
+    
     public DbSet<User> Users { get; set; }
-    public DbSet<TelegramUser> TelegramUsers { get; set; }
     public DbSet<SpaceRoom> SpaceRooms { get; set; }
-    public DbSet<History> Histories { get; set; }
-    public DbSet<Parameter> Parameters { get; set; }
 }

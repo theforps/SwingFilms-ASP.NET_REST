@@ -5,15 +5,15 @@ namespace SwingFilms.Infrastructure.Models;
 public class SpaceRoom
 {
     [Key]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     
     public string Code { get; set; }
     
-    public Parameter Parameter { get; set; } = new Parameter();
+    public Parameter? Parameter { get; set; }
     
-    public TelegramUser Admin { get; set; }
+    public User Admin { get; set; }
     
-    public List<TelegramUser> Members { get; set; } = new List<TelegramUser>();
+    public List<User> Members { get; set; } = new();
     
-    public History History { get; set; } = new History();
+    public List<History>? Histories { get; set; }
 }

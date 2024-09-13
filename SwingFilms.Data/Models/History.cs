@@ -5,9 +5,9 @@ namespace SwingFilms.Infrastructure.Models;
 public class History
 {
     [Key]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     
-    public List<TelegramUser> AmateurUsers { get; set; } = new List<TelegramUser>();
+    public List<User> AmateurUsers { get; set; } = new List<User>();
     
     public int FilmId { get; set; }
 }

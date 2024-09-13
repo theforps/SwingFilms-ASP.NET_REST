@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SwingFilms.Services.Features.Identity.DtoModels;
+﻿namespace SwingFilms.Services.Features.Identity.DtoModels;
 
 /// <summary>
 /// DTO для входа в систему
@@ -8,14 +6,17 @@ namespace SwingFilms.Services.Features.Identity.DtoModels;
 public sealed record LoginUserDto
 {
     /// <summary>
+    /// TelegramId
+    /// </summary>
+    public int TelegramId { get; init; }
+    
+    /// <summary>
     /// Логин пользователя
     /// </summary>
-    [Required]
     public string Login { get; init; }
     
     /// <summary>
     /// Пароль пользователя
     /// </summary>
-    [Required]
     public string Password { get; init; }
 }

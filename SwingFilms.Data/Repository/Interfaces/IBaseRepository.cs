@@ -2,7 +2,7 @@
 
 public interface IBaseRepository<T>
 {
-    Task<T> GetById(Guid id, CancellationToken cancellationToken);
+    Task<T?> GetById(Guid id, CancellationToken cancellationToken);
 
     Task Update(T model, CancellationToken cancellationToken);
 

@@ -2,7 +2,11 @@
 
 namespace SwingFilms.Infrastructure.Repository.Interfaces;
 
-public interface ISpaceRoomRepository
+public interface ISpaceRoomRepository : IBaseRepository<SpaceRoom>
 {
-    Task AddSpaceRoom(SpaceRoom spaceRoom, CancellationToken cancellationToken);
+    Task<SpaceRoom[]> GetAll(Guid userId, CancellationToken cancellationToken);
+
+    Task UpdateParameter(Guid spaceRoomId, Parameter parameter, CancellationToken cancellationToken);
+
+    Task RemoveMember(Guid spaceRoomId, Guid userId, CancellationToken cancellationToken);
 }

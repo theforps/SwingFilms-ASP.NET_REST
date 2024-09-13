@@ -32,14 +32,21 @@ public class LoginSystemCommand : IRequest<ResultDto<string>>
 public class LoginSystemCommandValidator : AbstractValidator<LoginSystemCommand>
 {
     public LoginSystemCommandValidator(IStringLocalizer<LoginSystemCommandValidator> localizer)
-    { 
+    {
+        RuleFor(x => x.Body.TelegramId)
+            .NotEqual(0)
+            .WithMessage(localizer["TELEGRAM_ID_IS_EMPTY"])
+            .When(x => string.IsNullOrEmpty(x.Body.Login) && string.IsNullOrEmpty(x.Body.Password));
+        
         RuleFor(x => x.Body.Login)
             .NotEmpty()
-            .WithMessage(localizer["LOGIN_IS_EMPTY"]);
+            .WithMessage(localizer["LOGIN_IS_EMPTY"])
+            .When(x => x.Body.TelegramId == 0);
         
         RuleFor(x => x.Body.Password)
             .NotEmpty()
-            .WithMessage(localizer["PASSWORD_IS_EMPTY"]);
+            .WithMessage(localizer["PASSWORD_IS_EMPTY"])
+            .When(x => x.Body.TelegramId == 0);
     }
 }
 
@@ -75,21 +82,47 @@ public class LoginSystemCommandHandler : IRequestHandler<LoginSystemCommand, Res
         if (!validationResult.IsValid)
             return new ResultDto<string>(null, string.Join(", ", validationResult.Errors), false);
 
-        _memoryCache.TryGetValue(request.Body.Login, out User? user);
+        User? user;
+        var isTelegramUser = request.Body.TelegramId != 0;
+        
+        if (isTelegramUser)
+            _memoryCache.TryGetValue(request.Body.TelegramId, out user);
+        else
+            _memoryCache.TryGetValue(request.Body.Login, out user);
         
         if (user == null)
         {
-            user = await _userRepository.GetByLogin(request.Body.Login, cancellationToken);
-            
-            if (user == null)
-                return new ResultDto<string>(null, _localizer["LOGIN_IS_WRONG"], false);
-        
-            _memoryCache.Set(request.Body.Login, user, TimeSpan.FromMinutes(5));
+            if (isTelegramUser)
+            {
+                user = await _userRepository.GetByTelegramId(request.Body.TelegramId, cancellationToken);
+
+                if (user == null)
+                {
+                    user = new User
+                    {
+                        Id = Guid.NewGuid(),
+                        TelegramId = request.Body.TelegramId
+                    };
+                    await _userRepository.Add(user, cancellationToken);
+                }
+            }
+            else
+            {
+                user = await _userRepository.GetByLogin(request.Body.Login, cancellationToken);
+                
+                if (user == null)
+                    return new ResultDto<string>(null, _localizer["LOGIN_IS_WRONG"], false);
+                
+                if (!_identityService.VerifyPassword(request.Body.Password, user.Password!))
+                            return new ResultDto<string>(null, _localizer["PASSWORD_IS_WRONG"], false);
+            }
         }
         
-        if (!_identityService.VerifyPassword(request.Body.Password, user.Password))
-            return new ResultDto<string>(null, _localizer["PASSWORD_IS_WRONG"], false);
-
+        if (isTelegramUser)
+            _memoryCache.Set(request.Body.TelegramId, user, TimeSpan.FromMinutes(1));
+        else
+            _memoryCache.Set(request.Body.Login, user, TimeSpan.FromMinutes(1));
+        
         var tokenJwt = _identityService.CreateTokenJwt(user.Role, user.Id, default);
         
         return new ResultDto<string>(tokenJwt);

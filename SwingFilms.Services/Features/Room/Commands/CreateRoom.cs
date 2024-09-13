@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
@@ -15,9 +14,9 @@ public class CreateRoomCommand : IRequest<ResultDto<string>>;
 public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, ResultDto<string>>
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly ITelegramUserRepository _telegramUserRepository;
     private readonly ISpaceRoomRepository _spaceRoomRepository;
     private readonly ISpaceRoomService _roomService;
+    private readonly IUserRepository _userRepository;
     private readonly IStringLocalizer<CreateRoomCommandHandler> _localizer;
     
     public CreateRoomCommandHandler(
@@ -25,13 +24,13 @@ public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, Resul
         IStringLocalizer<CreateRoomCommandHandler> localizer, 
         ISpaceRoomService roomService, 
         ISpaceRoomRepository spaceRoomRepository, 
-        ITelegramUserRepository telegramUserRepository)
+        IUserRepository userRepository)
     {
         _httpContextAccessor = httpContextAccessor;
         _localizer = localizer;
         _roomService = roomService;
         _spaceRoomRepository = spaceRoomRepository;
-        _telegramUserRepository = telegramUserRepository;
+        _userRepository = userRepository;
     }
     
     public async Task<ResultDto<string>> Handle(CreateRoomCommand request, CancellationToken cancellationToken)
@@ -41,21 +40,28 @@ public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, Resul
 
         var spaceRoom = new SpaceRoom();
 
-        if (int.TryParse(userIdString, out var userIdGuid))
+        if (int.TryParse(userIdString, out var intUserId))
         {
-            var user = await _telegramUserRepository.GetUserByTelegramId(userIdGuid, cancellationToken);
+            var user = await _userRepository.GetByTelegramId(intUserId, cancellationToken);
             
             spaceRoom.Admin = user;
             spaceRoom.Members.Add(user);
+            spaceRoom.Code = _roomService.GenerateSpaceRoomCode();
+        }
+        else if (Guid.TryParse(userIdString, out var intUserGuid))
+        {
+            var user = await _userRepository.GetById(intUserGuid, cancellationToken);
+
+            spaceRoom.Admin = user;
+            spaceRoom.Members.Add(user);
+            spaceRoom.Code = _roomService.GenerateSpaceRoomCode();
         }
         else
         {
             return new ResultDto<string>(null, _localizer["USER_NOT_FOUND"], false);
         }
 
-        spaceRoom.Code = _roomService.GenerateSpaceRoomCode();
-
-        await _spaceRoomRepository.AddSpaceRoom(spaceRoom, cancellationToken);
+        await _spaceRoomRepository.Add(spaceRoom, cancellationToken);
         
         return new ResultDto<string>(null);
     }

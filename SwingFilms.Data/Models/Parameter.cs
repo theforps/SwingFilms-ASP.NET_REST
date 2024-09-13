@@ -5,5 +5,11 @@ namespace SwingFilms.Infrastructure.Models;
 public class Parameter
 {
     [Key]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
+    
+    public string Genre { get; set; }
+    
+    public string Year { get; set; }
+    
+    public string Type { get; set; }
 }

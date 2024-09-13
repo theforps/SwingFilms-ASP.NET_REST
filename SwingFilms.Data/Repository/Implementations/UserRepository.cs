@@ -11,6 +11,11 @@ public class UserRepository(DataContext dataContext) : IUserRepository
         return await dataContext.Users.FirstOrDefaultAsync(x => x.Login.Equals(login), cancellationToken);
     }
 
+    public async Task<User?> GetByTelegramId(int telegramId, CancellationToken cancellationToken)
+    {
+        return await dataContext.Users.FirstOrDefaultAsync(x => x.TelegramId == telegramId, cancellationToken);
+    }
+
     public async Task<bool> IsActiveUser(Guid id, CancellationToken cancellationToken)
     {
         var user = await dataContext.Users.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
@@ -27,7 +32,7 @@ public class UserRepository(DataContext dataContext) : IUserRepository
         await dataContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<User> GetById(Guid id, CancellationToken cancellationToken)
+    public async Task<User?> GetById(Guid id, CancellationToken cancellationToken)
     {
         var user = await dataContext.Users.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
