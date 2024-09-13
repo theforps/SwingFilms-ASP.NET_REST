@@ -16,6 +16,11 @@ public class SpaceRoomRepository : ISpaceRoomRepository
     public async Task<SpaceRoom?> GetById(Guid id, CancellationToken cancellationToken)
     {
         return await _dataContext.SpaceRooms
+            .Include(x => x.Members)
+            .Include(x => x.Admin)
+            .Include(x => x.Parameter)
+            .Include(x => x.Histories)!
+                .ThenInclude(x => x.AmateurUsers)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 

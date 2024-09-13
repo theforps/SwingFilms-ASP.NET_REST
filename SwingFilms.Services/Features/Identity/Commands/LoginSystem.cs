@@ -123,7 +123,9 @@ public class LoginSystemCommandHandler : IRequestHandler<LoginSystemCommand, Res
         else
             _memoryCache.Set(request.Body.Login, user, TimeSpan.FromMinutes(1));
         
-        var tokenJwt = _identityService.CreateTokenJwt(user.Role, user.Id, default);
+        _memoryCache.Set(user.Id, user, TimeSpan.FromMinutes(15));
+        
+        var tokenJwt = _identityService.CreateTokenJwt(user.Role, user.Id);
         
         return new ResultDto<string>(tokenJwt);
     }

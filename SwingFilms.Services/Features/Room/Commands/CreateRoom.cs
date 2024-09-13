@@ -16,7 +16,7 @@ public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, Resul
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ISpaceRoomRepository _spaceRoomRepository;
     private readonly ISpaceRoomService _roomService;
-    private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
     private readonly IStringLocalizer<CreateRoomCommandHandler> _localizer;
     
     public CreateRoomCommandHandler(
@@ -24,37 +24,27 @@ public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, Resul
         IStringLocalizer<CreateRoomCommandHandler> localizer, 
         ISpaceRoomService roomService, 
         ISpaceRoomRepository spaceRoomRepository, 
-        IUserRepository userRepository)
+        IUserService userService)
     {
         _httpContextAccessor = httpContextAccessor;
         _localizer = localizer;
         _roomService = roomService;
         _spaceRoomRepository = spaceRoomRepository;
-        _userRepository = userRepository;
+        _userService = userService;
     }
     
     public async Task<ResultDto<string>> Handle(CreateRoomCommand request, CancellationToken cancellationToken)
     {
-        var userIdString = _httpContextAccessor.HttpContext!.User.Claims
-            .FirstOrDefault(x => x.Type == ClaimTypes.Sid)!.Value;
-
         var spaceRoom = new SpaceRoom();
+        User? user = await _userService.GetUserId(_httpContextAccessor, cancellationToken);
 
-        if (int.TryParse(userIdString, out var intUserId))
+        if (user != null)
         {
-            var user = await _userRepository.GetByTelegramId(intUserId, cancellationToken);
+            spaceRoom.Id = Guid.NewGuid(); 
+            spaceRoom.Code = _roomService.GenerateSpaceRoomCode();
             
-            spaceRoom.Admin = user;
-            spaceRoom.Members.Add(user);
-            spaceRoom.Code = _roomService.GenerateSpaceRoomCode();
-        }
-        else if (Guid.TryParse(userIdString, out var intUserGuid))
-        {
-            var user = await _userRepository.GetById(intUserGuid, cancellationToken);
-
-            spaceRoom.Admin = user;
-            spaceRoom.Members.Add(user);
-            spaceRoom.Code = _roomService.GenerateSpaceRoomCode();
+            user.SpaceRooms.Add(spaceRoom);
+            user.AdminSpaceRooms.Add(spaceRoom);
         }
         else
         {

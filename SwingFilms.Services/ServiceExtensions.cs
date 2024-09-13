@@ -14,6 +14,7 @@ public static class ServiceExtensions
     public static void AddServices(this IServiceCollection services)
     {
         services.AddScoped<IIdentityService, IdentityService>();
+        services.AddScoped<IUserService, UserService>();
         services.AddScoped<ISpaceRoomService, SpaceRoomService>();
     }
     
