@@ -22,7 +22,6 @@ public class RoomController : ControllerBase
     /// </summary>
     /// <param name="command">Команда</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns></returns>
     [HttpPost(nameof(CreateRoom), Name = nameof(CreateRoom))]
     public async Task<ActionResult> CreateRoom(CreateRoomCommand command, CancellationToken cancellationToken)
     {
@@ -39,6 +38,60 @@ public class RoomController : ControllerBase
     /// <returns>Комната</returns>
     [HttpGet(nameof(GetRoom), Name = nameof(GetRoom))]
     public async Task<ActionResult> GetRoom(GetRoomQuery command, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(command, cancellationToken);
+        
+        return Ok(result);
+    }
+    
+    /// <summary>
+    /// Редактирование параметра комнаты
+    /// </summary>
+    /// <param name="command">Команда</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    [HttpPost(nameof(EditRoomParameter), Name = nameof(EditRoomParameter))]
+    public async Task<ActionResult> EditRoomParameter(EditRoomParameterCommand command, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(command, cancellationToken);
+        
+        return Ok(result);
+    }
+    
+    /// <summary>
+    /// Получение истории пользователя в комнате
+    /// </summary>
+    /// <param name="query">Запрос</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Список фильмов</returns>
+    [HttpGet(nameof(GetRoomUserHistory), Name = nameof(GetRoomUserHistory))]
+    public async Task<ActionResult> GetRoomUserHistory(GetRoomUserHistory query, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(query, cancellationToken);
+        
+        return Ok(result);
+    }
+    
+    /// <summary>
+    /// Получение взаимных лайков в комнате
+    /// </summary>
+    /// <param name="query">Запрос</param>
+    /// <param name="cancellationToken">Токено отмены</param>
+    /// <returns>Список фильмов</returns>
+    [HttpGet(nameof(GetRoomMatches), Name = nameof(GetRoomMatches))]
+    public async Task<ActionResult> GetRoomMatches(GetRoomMatchesQuery query, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(query, cancellationToken);
+        
+        return Ok(result);
+    }
+    
+    /// <summary>
+    /// Очистка истории комнаты
+    /// </summary>
+    /// <param name="command">Команда</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    [HttpPost(nameof(ClearRoomHistory), Name = nameof(ClearRoomHistory))]
+    public async Task<ActionResult> ClearRoomHistory(ClearRoomHistoryCommand command, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(command, cancellationToken);
         

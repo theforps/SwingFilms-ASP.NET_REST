@@ -13,7 +13,7 @@ public class HistoryRoomRepository : IHistoryRoomRepository
         _dataContext = dataContext;
     }
     
-    public async Task<History[]?> GetUserHistoryInRoom(Guid userId, Guid roomId, CancellationToken cancellationToken)
+    public async Task<History[]> GetUserHistoryInRoom(Guid userId, Guid roomId, CancellationToken cancellationToken)
     {
         var spaceRoom = await _dataContext.SpaceRooms
             .Include(spaceRoom => spaceRoom.Histories)
@@ -28,7 +28,7 @@ public class HistoryRoomRepository : IHistoryRoomRepository
             return userHistory.OrderByDescending(x => x.CreatedDate).ToArray();
         }
 
-        return null;
+        return [];
     }
 
     public async Task<History[]> GetRoomMatches(Guid roomId, CancellationToken cancellationToken)

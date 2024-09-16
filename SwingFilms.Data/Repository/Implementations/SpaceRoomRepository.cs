@@ -51,9 +51,13 @@ public class SpaceRoomRepository : ISpaceRoomRepository
 
     public async Task UpdateParameter(Guid spaceRoomId, Parameter parameter, CancellationToken cancellationToken)
     {
-        var spaceRoom = await _dataContext.SpaceRooms.FirstOrDefaultAsync(x => x.Id == spaceRoomId, cancellationToken);
+        var spaceRoom = await _dataContext.SpaceRooms
+            .Include(spaceRoom => spaceRoom.Parameter)
+            .FirstOrDefaultAsync(x => x.Id == spaceRoomId, cancellationToken);
 
-        spaceRoom.Parameter = parameter;
+        spaceRoom.Parameter.Genre = parameter.Genre;
+        spaceRoom.Parameter.Type = parameter.Type;
+        spaceRoom.Parameter.Year = parameter.Year;
 
         await _dataContext.SaveChangesAsync(cancellationToken);
     }

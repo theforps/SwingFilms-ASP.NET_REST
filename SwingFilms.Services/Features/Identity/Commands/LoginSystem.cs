@@ -100,7 +100,6 @@ public class LoginSystemCommandHandler : IRequestHandler<LoginSystemCommand, Res
                 {
                     user = new User
                     {
-                        Id = Guid.NewGuid(),
                         TelegramId = request.Body.TelegramId
                     };
                     await _userRepository.Add(user, cancellationToken);

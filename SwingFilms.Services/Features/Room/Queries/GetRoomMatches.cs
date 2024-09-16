@@ -12,16 +12,16 @@ using SwingFilms.Services.Features.Room.DtoModels;
 
 namespace SwingFilms.Services.Features.Room.Queries;
 
-public class GetGroupMatchesQuery : IRequest<ResultDto<HistoryDto[]>>
+public class GetRoomMatchesQuery : IRequest<ResultDto<HistoryDto[]>>
 {
     [FromQuery]
     [Required]
     public Guid RoomId { get; init; }
 }
 
-public class GetGroupMatchesQueryValidator : AbstractValidator<GetGroupMatchesQuery>
+public class GetRoomMatchesQueryValidator : AbstractValidator<GetRoomMatchesQuery>
 {
-    public GetGroupMatchesQueryValidator(IStringLocalizer<GetGroupMatchesQueryValidator> localizer)
+    public GetRoomMatchesQueryValidator(IStringLocalizer<GetRoomMatchesQueryValidator> localizer)
     {
         RuleFor(x => x.RoomId)
             .NotEmpty()
@@ -29,18 +29,18 @@ public class GetGroupMatchesQueryValidator : AbstractValidator<GetGroupMatchesQu
     }
 }
 
-public class GetGroupMatchesQueryHandler : IRequestHandler<GetGroupMatchesQuery, ResultDto<HistoryDto[]>>
+public class GetRoomMatchesQueryHandler : IRequestHandler<GetRoomMatchesQuery, ResultDto<HistoryDto[]>>
 {
-    private readonly IValidator<GetGroupMatchesQuery> _validator;
+    private readonly IValidator<GetRoomMatchesQuery> _validator;
     private readonly IMemoryCache _memoryCache;
     private readonly ISpaceRoomRepository _spaceRoomRepository;
     private readonly IHistoryRoomRepository _historyRoomRepository;
     private readonly IMapper _mapper;
-    private readonly IStringLocalizer<GetGroupMatchesQueryHandler> _localizer;
+    private readonly IStringLocalizer<GetRoomMatchesQueryHandler> _localizer;
 
-    public GetGroupMatchesQueryHandler(
-        IValidator<GetGroupMatchesQuery> validator,
-        IStringLocalizer<GetGroupMatchesQueryHandler> localizer,
+    public GetRoomMatchesQueryHandler(
+        IValidator<GetRoomMatchesQuery> validator,
+        IStringLocalizer<GetRoomMatchesQueryHandler> localizer,
         ISpaceRoomRepository spaceRoomRepository,
         IMemoryCache memoryCache,
         IMapper mapper, 
@@ -54,7 +54,7 @@ public class GetGroupMatchesQueryHandler : IRequestHandler<GetGroupMatchesQuery,
         _historyRoomRepository = historyRoomRepository;
     }
 
-    public async Task<ResultDto<HistoryDto[]>> Handle(GetGroupMatchesQuery request, CancellationToken cancellationToken)
+    public async Task<ResultDto<HistoryDto[]>> Handle(GetRoomMatchesQuery request, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         

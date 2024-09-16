@@ -2,6 +2,8 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using SwingFilms.Services.Features.Identity.Commands;
+using SwingFilms.Services.Features.Room.Commands;
+using SwingFilms.Services.Features.Room.Queries;
 using SwingFilms.Services.Mapper;
 using SwingFilms.Services.Services.Implementations;
 using SwingFilms.Services.Services.Interfaces;
@@ -26,7 +28,8 @@ public static class ServiceExtensions
     public static void AddServiceMapper(this IServiceCollection services)
     {
         services.AddAutoMapper(
-            typeof(UserMapper)
+            typeof(UserMapper),
+            typeof(RoomMapper)
         );
     }
     
@@ -39,6 +42,11 @@ public static class ServiceExtensions
     public static void AddServiceFluentValidation(this IServiceCollection services)
     {
         services.AddValidatorsFromAssemblyContaining<LoginSystemCommandValidator>();
+        services.AddValidatorsFromAssemblyContaining<RegistrationSystemCommandValidator>();
+        services.AddValidatorsFromAssemblyContaining<ClearRoomHistoryCommandValidator>();
+        services.AddValidatorsFromAssemblyContaining<EditRoomParameterCommandValidator>();
+        services.AddValidatorsFromAssemblyContaining<GetRoomMatchesQueryValidator>();
+        services.AddValidatorsFromAssemblyContaining<GetRoomUserHistoryQueryValidator>();
     }
     
         

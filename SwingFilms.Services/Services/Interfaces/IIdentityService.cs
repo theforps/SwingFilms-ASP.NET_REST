@@ -19,7 +19,7 @@ public interface IIdentityService
     /// Кодировка пароля
     /// </summary>
     /// <param name="password">Входящий пароль</param>
-    /// <returns>Результат кодировка</returns>
+    /// <returns>Результат кодировки</returns>
     string HashPassword(string password);
 
     /// <summary>

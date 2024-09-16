@@ -40,11 +40,11 @@ public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, Resul
 
         if (user != null)
         {
-            spaceRoom.Id = Guid.NewGuid(); 
             spaceRoom.Code = _roomService.GenerateSpaceRoomCode();
-            
-            user.AdminSpaceRooms.Add(spaceRoom);
-            user.SpaceRooms.Add(spaceRoom);
+            spaceRoom.Admin = user;
+            spaceRoom.Members.Add(user);
+            // user.AdminSpaceRooms.Add(spaceRoom);
+            // user.SpaceRooms.Add(spaceRoom);
         }
         else
         {

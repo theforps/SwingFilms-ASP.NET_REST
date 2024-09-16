@@ -14,16 +14,16 @@ using SwingFilms.Services.Services.Interfaces;
 
 namespace SwingFilms.Services.Features.Room.Queries;
 
-public class GetGroupUserHistoryQuery : IRequest<ResultDto<HistoryDto[]>>
+public class GetRoomUserHistory : IRequest<ResultDto<HistoryDto[]>>
 {
     [FromQuery]
     [Required]
     public Guid RoomId { get; init; }
 }
 
-public class GetGroupUserHistoryQueryValidator : AbstractValidator<GetGroupUserHistoryQuery>
+public class GetRoomUserHistoryQueryValidator : AbstractValidator<GetRoomUserHistory>
 {
-    public GetGroupUserHistoryQueryValidator(IStringLocalizer<GetGroupUserHistoryQueryValidator> localizer)
+    public GetRoomUserHistoryQueryValidator(IStringLocalizer<GetRoomUserHistoryQueryValidator> localizer)
     {
         RuleFor(x => x.RoomId)
             .NotEmpty()
@@ -31,20 +31,20 @@ public class GetGroupUserHistoryQueryValidator : AbstractValidator<GetGroupUserH
     }
 }
 
-public class GetGroupUserHistoryQueryHandler : IRequestHandler<GetGroupUserHistoryQuery, ResultDto<HistoryDto[]>>
+public class GetRoomUserHistoryQueryHandler : IRequestHandler<GetRoomUserHistory, ResultDto<HistoryDto[]>>
 {
-    private readonly IValidator<GetGroupUserHistoryQuery> _validator;
+    private readonly IValidator<GetRoomUserHistory> _validator;
     private readonly IMemoryService _memoryService;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IMemoryCache _memoryCache;
     private readonly ISpaceRoomRepository _spaceRoomRepository;
     private readonly IHistoryRoomRepository _historyRepository;
     private readonly IMapper _mapper;
-    private readonly IStringLocalizer<GetGroupUserHistoryQueryHandler> _localizer;
+    private readonly IStringLocalizer<GetRoomUserHistoryQueryHandler> _localizer;
     
-    public GetGroupUserHistoryQueryHandler(
-        IValidator<GetGroupUserHistoryQuery> validator, 
-        IStringLocalizer<GetGroupUserHistoryQueryHandler> localizer, 
+    public GetRoomUserHistoryQueryHandler(
+        IValidator<GetRoomUserHistory> validator, 
+        IStringLocalizer<GetRoomUserHistoryQueryHandler> localizer, 
         IMemoryService memoryService, 
         IHttpContextAccessor httpContextAccessor, 
         ISpaceRoomRepository spaceRoomRepository, 
@@ -62,7 +62,7 @@ public class GetGroupUserHistoryQueryHandler : IRequestHandler<GetGroupUserHisto
         _mapper = mapper;
     }
     
-    public async Task<ResultDto<HistoryDto[]>> Handle(GetGroupUserHistoryQuery request, CancellationToken cancellationToken)
+    public async Task<ResultDto<HistoryDto[]>> Handle(GetRoomUserHistory request, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         

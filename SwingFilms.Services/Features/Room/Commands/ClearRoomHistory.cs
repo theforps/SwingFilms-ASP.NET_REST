@@ -23,7 +23,7 @@ public class ClearRoomHistoryCommandValidator : AbstractValidator<ClearRoomHisto
     {
         RuleFor(x => x.RoomId)
             .NotEmpty()
-            .WithMessage(localizer["ROOM_IS_IS_EMPTY"]);
+            .WithMessage(localizer["ROOM_ID_IS_EMPTY"]);
     }
 }
 

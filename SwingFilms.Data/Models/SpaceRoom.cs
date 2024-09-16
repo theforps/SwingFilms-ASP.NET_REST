@@ -8,12 +8,12 @@ public class SpaceRoom
     public Guid Id { get; set; }
     
     public string Code { get; set; }
-    
-    public Parameter? Parameter { get; set; }
+
+    public Parameter Parameter { get; set; } = new();
     
     public User Admin { get; set; }
     
     public List<User> Members { get; set; } = new();
     
-    public List<History> Histories { get; set; } = new List<History>();
+    public List<History> Histories { get; set; } = new();
 }
