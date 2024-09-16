@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SwingFilms.Services.Features.Room.Commands;
+using SwingFilms.Services.Features.Room.Queries;
 
 namespace SwingFilms.Controllers;
 
@@ -16,29 +17,27 @@ public class HistoryController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost(nameof(GetUserHistory), Name = nameof(GetUserHistory))]
-    public async Task<ActionResult> GetUserHistory(GetUserHistoryCommand command, CancellationToken cancellationToken)
+    [HttpGet(nameof(GetGroupUserHistory), Name = nameof(GetGroupUserHistory))]
+    public async Task<ActionResult> GetGroupUserHistory(GetGroupUserHistoryQuery query, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(query, cancellationToken);
+        
+        return Ok(result);
+    }
+    
+    [HttpGet(nameof(GetRoomMatches), Name = nameof(GetRoomMatches))]
+    public async Task<ActionResult> GetRoomMatches(GetGroupMatchesQuery query, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(query, cancellationToken);
+        
+        return Ok(result);
+    }
+    
+    [HttpPost(nameof(ClearRoomHistory), Name = nameof(ClearRoomHistory))]
+    public async Task<ActionResult> ClearRoomHistory(ClearRoomHistoryCommand command, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(command, cancellationToken);
         
         return Ok(result);
     }
-    
-    // [HttpPost(nameof(GetRoomMatches), Name = nameof(GetRoomMatches))]
-    // public async Task<ActionResult> GetRoomMatches([FromBody] Guid roomId,
-    //     CancellationToken cancellationToken)
-    // {
-    //     var result = await _historyRoomRepository.GetRoomMatches(roomId, cancellationToken);
-    //     
-    //     return Ok(result);
-    // }
-    //
-    // [HttpPost(nameof(ClearRoomHistory), Name = nameof(ClearRoomHistory))]
-    // public async Task<ActionResult> ClearRoomHistory([FromBody] Guid roomId,
-    //     CancellationToken cancellationToken)
-    // {
-    //     await _historyRoomRepository.ClearRoomHistory(roomId, cancellationToken);
-    //     
-    //     return Ok();
-    // }
 }

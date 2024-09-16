@@ -72,6 +72,7 @@ public class HistoryRoomRepository : IHistoryRoomRepository
     public async Task ClearRoomHistory(Guid roomId, CancellationToken cancellationToken)
     {
         var spaceRoom = await _dataContext.SpaceRooms
+            .Include(x => x.Histories)
             .FirstOrDefaultAsync(x => x.Id == roomId, cancellationToken);
         
         spaceRoom.Histories.Clear();
