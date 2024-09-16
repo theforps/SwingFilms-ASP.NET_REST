@@ -11,6 +11,4 @@ public sealed record SpaceRoomDto
     public Guid AdminId { get; init; }
     
     public Guid[] MembersIds { get; init; }
-    
-    public List<HistoryDto> Histories { get; set; }
 }

@@ -15,8 +15,7 @@ public sealed class DataContext : DbContext
     {
         modelBuilder.Entity<User>()
             .HasMany(x => x.Histories)
-            .WithMany(e => e.AmateurUsers)
-            .UsingEntity<UserHistory>();
+            .WithOne(e => e.Author);
         
         modelBuilder.Entity<User>()
             .HasMany(x => x.SpaceRooms)

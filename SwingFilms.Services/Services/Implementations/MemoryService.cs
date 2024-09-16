@@ -7,20 +7,23 @@ using SwingFilms.Services.Services.Interfaces;
 
 namespace SwingFilms.Services.Services.Implementations;
 
-public class UserService  : IUserService
+public class MemoryService  : IMemoryService
 {
     private readonly IUserRepository _userRepository;
+    private readonly ISpaceRoomRepository _spaceRoomRepository;
     private readonly IMemoryCache _memoryCache;
     
-    public UserService(
+    public MemoryService(
         IUserRepository userRepository, 
-        IMemoryCache memoryCache)
+        IMemoryCache memoryCache, 
+        ISpaceRoomRepository spaceRoomRepository)
     {
         _userRepository = userRepository;
         _memoryCache = memoryCache;
+        _spaceRoomRepository = spaceRoomRepository;
     }
     
-    public async Task<User?> GetUserId(IHttpContextAccessor httpContextAccessor, CancellationToken cancellationToken)
+    public async Task<User?> GetUserById(IHttpContextAccessor httpContextAccessor, CancellationToken cancellationToken)
     {
         var userIdString = httpContextAccessor.HttpContext!.User.Claims
             .FirstOrDefault(x => x.Type == ClaimTypes.Sid)!.Value;

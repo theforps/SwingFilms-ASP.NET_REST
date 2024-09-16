@@ -15,5 +15,5 @@ public class SpaceRoom
     
     public List<User> Members { get; set; } = new();
     
-    public List<History>? Histories { get; set; }
+    public List<History> Histories { get; set; } = new List<History>();
 }

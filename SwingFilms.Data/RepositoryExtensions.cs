@@ -10,6 +10,7 @@ public static class RepositoryExtensions
     public static void AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IHistoryRoomRepository, HistoryRoomRepository>();
         services.AddScoped<ISpaceRoomRepository, SpaceRoomRepository>();
     }
 

@@ -7,7 +7,11 @@ public class History
     [Key]
     public Guid Id { get; set; }
     
-    public List<User> AmateurUsers { get; set; } = new List<User>();
+    public User Author { get; set; }
+    
+    public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     
     public int FilmId { get; set; }
+    
+    public bool IsWantToWatch { get; set; }
 }

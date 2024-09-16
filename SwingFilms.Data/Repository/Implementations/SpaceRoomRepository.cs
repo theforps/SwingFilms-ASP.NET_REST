@@ -19,9 +19,8 @@ public class SpaceRoomRepository : ISpaceRoomRepository
             .Include(x => x.Members)
             .Include(x => x.Admin)
             .Include(x => x.Parameter)
-            .Include(x => x.Histories)!
-                .ThenInclude(x => x.AmateurUsers)
-            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            .Include(x => x.Histories)
+                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     public Task Update(SpaceRoom model, CancellationToken cancellationToken)

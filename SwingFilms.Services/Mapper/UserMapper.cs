@@ -15,10 +15,10 @@ public class UserMapper : Profile
             .ForMember(x => x.MembersIds,
                 options => options
                     .MapFrom(src => src.Members.Select(x => x.Id).ToArray()));
-        
-        CreateMap<History, HistoryDto>()
-            .ForMember(x => x.AmateurUsersIds,
-                options => options
-                    .MapFrom(src => src.AmateurUsers.Select(x => x.Id).ToArray()));
+
+        CreateMap<History, HistoryDto>();
+        //     .ForMember(x => x.AmateurUsersIds,
+        //         options => options
+        //             .MapFrom(src => src.AmateurUsers.Select(x => x.Id).ToArray()));
     }
 }
