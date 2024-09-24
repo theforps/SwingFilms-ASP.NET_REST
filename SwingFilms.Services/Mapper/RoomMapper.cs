@@ -12,15 +12,17 @@ public class RoomMapper : Profile
             .ForMember(x => x.AdminId,
                 options => options
                     .MapFrom(src => src.Admin.Id))
+            .ForMember(x => x.Parameter,
+                options => options
+                    .MapFrom(src => src.Parameter))
             .ForMember(x => x.MembersIds,
                 options => options
                     .MapFrom(src => src.Members.Select(x => x.Id).ToArray()));
 
         CreateMap<History, HistoryDto>();
-        //     .ForMember(x => x.AmateurUsersIds,
-        //         options => options
-        //             .MapFrom(src => src.AmateurUsers.Select(x => x.Id).ToArray()));
 
         CreateMap<Parameter, EditParameterDto>().ReverseMap();
+        
+        CreateMap<Parameter, ParameterDto>().ReverseMap();
     }
 }

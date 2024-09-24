@@ -15,7 +15,8 @@ public sealed class DataContext : DbContext
     {
         modelBuilder.Entity<User>()
             .HasMany(x => x.Histories)
-            .WithOne(e => e.Author);
+            .WithOne(e => e.Author)
+            .OnDelete(DeleteBehavior.Cascade);
         
         modelBuilder.Entity<User>()
             .HasMany(x => x.SpaceRooms)
@@ -24,7 +25,18 @@ public sealed class DataContext : DbContext
 
         modelBuilder.Entity<SpaceRoom>()
             .HasOne(x => x.Admin)
-            .WithMany(x => x.AdminSpaceRooms);
+            .WithMany(x => x.AdminSpaceRooms)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<SpaceRoom>()
+            .HasMany(x => x.Histories)
+            .WithOne(x => x.SpaceRoom)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<SpaceRoom>()
+            .HasOne(x => x.Parameter)
+            .WithOne(x => x.SpaceRoom)
+            .OnDelete(DeleteBehavior.Cascade);
     }
     
     public DbSet<User> Users { get; set; }

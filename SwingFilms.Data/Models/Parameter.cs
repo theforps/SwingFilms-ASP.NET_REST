@@ -12,4 +12,6 @@ public class Parameter
     public string? Year { get; set; }
     
     public string? Type { get; set; }
+    
+    public SpaceRoom SpaceRoom { get; set; }
 }

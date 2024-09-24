@@ -18,17 +18,18 @@ public class RoomController : ControllerBase
     }
     
     /// <summary>
-    /// Создание комнаты
+    /// Получение комнат пользователя
     /// </summary>
     /// <param name="command">Команда</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    [HttpPost(nameof(CreateRoom), Name = nameof(CreateRoom))]
-    public async Task<ActionResult> CreateRoom(CreateRoomCommand command, CancellationToken cancellationToken)
+    /// <returns>Комнаты</returns>
+    [HttpGet(nameof(GetRooms), Name = nameof(GetRooms))]
+    public async Task<ActionResult> GetRooms(GetRoomsQuery command, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(command, cancellationToken);
         
         return Ok(result);
-    }    
+    }
     
     /// <summary>
     /// Получение комнаты
@@ -43,6 +44,32 @@ public class RoomController : ControllerBase
         
         return Ok(result);
     }
+    
+    /// <summary>
+    /// Создание комнаты
+    /// </summary>
+    /// <param name="command">Команда</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    [HttpPost(nameof(CreateRoom), Name = nameof(CreateRoom))]
+    public async Task<ActionResult> CreateRoom(CreateRoomCommand command, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(command, cancellationToken);
+        
+        return Ok(result);
+    }  
+    
+    /// <summary>
+    /// Удаление комнаты
+    /// </summary>
+    /// <param name="command">Команда</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    [HttpDelete(nameof(DeleteRoom), Name = nameof(DeleteRoom))]
+    public async Task<ActionResult> DeleteRoom(DeleteRoomCommand command, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(command, cancellationToken);
+        
+        return Ok(result);
+    }  
     
     /// <summary>
     /// Редактирование параметра комнаты

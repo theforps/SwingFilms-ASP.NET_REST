@@ -14,4 +14,6 @@ public class History
     public int FilmId { get; set; }
     
     public bool IsWantToWatch { get; set; }
+    
+    public SpaceRoom SpaceRoom { get; set; }
 }

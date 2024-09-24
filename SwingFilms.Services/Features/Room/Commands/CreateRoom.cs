@@ -43,8 +43,7 @@ public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, Resul
             spaceRoom.Code = _roomService.GenerateSpaceRoomCode();
             spaceRoom.Admin = user;
             spaceRoom.Members.Add(user);
-            // user.AdminSpaceRooms.Add(spaceRoom);
-            // user.SpaceRooms.Add(spaceRoom);
+            spaceRoom.Parameter = new Parameter();
         }
         else
         {

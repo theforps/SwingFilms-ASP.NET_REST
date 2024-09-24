@@ -36,7 +36,7 @@ public class SpaceRoomRepository : ISpaceRoomRepository
 
     public async Task Delete(Guid id, CancellationToken cancellationToken)
     {
-        var spaceRoom = await _dataContext.SpaceRooms.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var spaceRoom = await GetById(id, cancellationToken);
 
         _dataContext.SpaceRooms.Remove(spaceRoom);
         await _dataContext.SaveChangesAsync(cancellationToken);
@@ -45,6 +45,9 @@ public class SpaceRoomRepository : ISpaceRoomRepository
     public async Task<SpaceRoom[]> GetAll(Guid userId, CancellationToken cancellationToken)
     {
         return await _dataContext.SpaceRooms
+            .Include(x => x.Members)
+            .Include(x => x.Admin)
+            .Include(x => x.Parameter)
             .Where(x => x.Members.Select(user => user.Id == userId).Any())
             .ToArrayAsync(cancellationToken);
     }

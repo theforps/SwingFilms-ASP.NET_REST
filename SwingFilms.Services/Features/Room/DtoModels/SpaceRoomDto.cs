@@ -6,7 +6,7 @@ public sealed record SpaceRoomDto
     
     public string Code { get; init; }
     
-    public ParameterDto Parameters { get; init; }
+    public ParameterDto Parameter { get; init; }
     
     public Guid AdminId { get; init; }
     
