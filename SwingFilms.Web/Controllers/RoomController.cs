@@ -91,7 +91,7 @@ public class RoomController : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Список фильмов</returns>
     [HttpGet(nameof(GetRoomUserHistory), Name = nameof(GetRoomUserHistory))]
-    public async Task<ActionResult> GetRoomUserHistory(GetRoomUserHistory query, CancellationToken cancellationToken)
+    public async Task<ActionResult> GetRoomUserHistory(GetRoomUserHistoryQuery query, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(query, cancellationToken);
         

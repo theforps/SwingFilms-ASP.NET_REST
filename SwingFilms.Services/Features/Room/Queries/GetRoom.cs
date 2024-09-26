@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -15,7 +16,17 @@ public class GetRoomQuery : IRequest<ResultDto<SpaceRoomDto>>
 {
     [FromQuery]
     [Required]
-    public Guid SpaceRoomId { get; init; }
+    public Guid RoomId { get; init; }
+}
+
+public class GetRoomQueryValidator : AbstractValidator<GetRoomQuery>
+{
+    public GetRoomQueryValidator(IStringLocalizer<GetRoomQueryValidator> localizer)
+    {
+        RuleFor(x => x.RoomId)
+            .NotEmpty()
+            .WithMessage(localizer["ROOM_ID_IS_EMPTY"]);
+    }
 }
 
 public class GetRoomQueryHandler : IRequestHandler<GetRoomQuery, ResultDto<SpaceRoomDto>>
@@ -38,13 +49,13 @@ public class GetRoomQueryHandler : IRequestHandler<GetRoomQuery, ResultDto<Space
     
     public async Task<ResultDto<SpaceRoomDto>> Handle(GetRoomQuery request, CancellationToken cancellationToken)
     {
-        var spaceRoom = _memoryCache.Get<SpaceRoom>(request.SpaceRoomId) 
-                   ?? await _spaceRoomRepository.GetById(request.SpaceRoomId, cancellationToken);
+        var spaceRoom = _memoryCache.Get<SpaceRoom>(request.RoomId) 
+                   ?? await _spaceRoomRepository.GetById(request.RoomId, cancellationToken);
         
         if (spaceRoom == null)
             return new ResultDto<SpaceRoomDto>(null, _localizer["SPACE_ROOM_NOT_FOUND"], false);
         
-        _memoryCache.Set(request.SpaceRoomId, spaceRoom, TimeSpan.FromMinutes(15));
+        _memoryCache.Set(request.RoomId, spaceRoom, TimeSpan.FromMinutes(15));
         
         var spaceRoomDto = _mapper.Map<SpaceRoomDto>(spaceRoom);
         

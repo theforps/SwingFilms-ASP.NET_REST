@@ -15,5 +15,7 @@ public class History
     
     public bool IsWantToWatch { get; set; }
     
+    public Guid SpaceRoomId { get; set; }
+    
     public SpaceRoom SpaceRoom { get; set; }
 }

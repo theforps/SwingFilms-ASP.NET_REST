@@ -21,8 +21,8 @@ public class RoomMapper : Profile
 
         CreateMap<History, HistoryDto>();
 
-        CreateMap<Parameter, EditParameterDto>().ReverseMap();
+        CreateMap<Parameter, EditParameterDto>();
         
-        CreateMap<Parameter, ParameterDto>().ReverseMap();
+        CreateMap<Parameter, ParameterDto>();
     }
 }

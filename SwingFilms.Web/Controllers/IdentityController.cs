@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SwingFilms.Services.Features.Identity.Commands;
+using SwingFilms.Services.Features.Identity.Queries;
 
 namespace SwingFilms.Controllers;
 
@@ -37,6 +38,14 @@ public class IdentityController : ControllerBase
     [ApiExplorerSettings(IgnoreApi = true)]
     [HttpPost(nameof(Registration), Name = nameof(Registration))]
     public async Task<ActionResult> Registration(RegistrationSystemCommand command, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(command, cancellationToken);
+        
+        return Ok(result);
+    }
+    
+    [HttpGet(nameof(GetUserInfo), Name = nameof(GetUserInfo))]
+    public async Task<ActionResult> GetUserInfo(GetUserInfoQuery command, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(command, cancellationToken);
         

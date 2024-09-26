@@ -13,5 +13,7 @@ public class Parameter
     
     public string? Type { get; set; }
     
+    public Guid SpaceRoomId { get; set; }
+    
     public SpaceRoom SpaceRoom { get; set; }
 }

@@ -14,26 +14,26 @@ using SwingFilms.Services.Services.Interfaces;
 
 namespace SwingFilms.Services.Features.Room.Queries;
 
-public class GetRoomUserHistory : IRequest<ResultDto<HistoryDto[]>>
+public class GetRoomUserHistoryQuery : IRequest<ResultDto<HistoryDto[]>>
 {
     [FromQuery]
     [Required]
     public Guid RoomId { get; init; }
 }
 
-public class GetRoomUserHistoryQueryValidator : AbstractValidator<GetRoomUserHistory>
+public class GetRoomUserHistoryQueryValidator : AbstractValidator<GetRoomUserHistoryQuery>
 {
     public GetRoomUserHistoryQueryValidator(IStringLocalizer<GetRoomUserHistoryQueryValidator> localizer)
     {
         RuleFor(x => x.RoomId)
             .NotEmpty()
-            .WithMessage(localizer["ROOM_IS_IS_EMPTY"]);
+            .WithMessage(localizer["ROOM_ID_IS_EMPTY"]);
     }
 }
 
-public class GetRoomUserHistoryQueryHandler : IRequestHandler<GetRoomUserHistory, ResultDto<HistoryDto[]>>
+public class GetRoomUserHistoryQueryHandler : IRequestHandler<GetRoomUserHistoryQuery, ResultDto<HistoryDto[]>>
 {
-    private readonly IValidator<GetRoomUserHistory> _validator;
+    private readonly IValidator<GetRoomUserHistoryQuery> _validator;
     private readonly IMemoryService _memoryService;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IMemoryCache _memoryCache;
@@ -43,7 +43,7 @@ public class GetRoomUserHistoryQueryHandler : IRequestHandler<GetRoomUserHistory
     private readonly IStringLocalizer<GetRoomUserHistoryQueryHandler> _localizer;
     
     public GetRoomUserHistoryQueryHandler(
-        IValidator<GetRoomUserHistory> validator, 
+        IValidator<GetRoomUserHistoryQuery> validator, 
         IStringLocalizer<GetRoomUserHistoryQueryHandler> localizer, 
         IMemoryService memoryService, 
         IHttpContextAccessor httpContextAccessor, 
@@ -62,14 +62,15 @@ public class GetRoomUserHistoryQueryHandler : IRequestHandler<GetRoomUserHistory
         _mapper = mapper;
     }
     
-    public async Task<ResultDto<HistoryDto[]>> Handle(GetRoomUserHistory request, CancellationToken cancellationToken)
+    public async Task<ResultDto<HistoryDto[]>> Handle(GetRoomUserHistoryQuery request, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         
         if (!validationResult.IsValid)
             return new ResultDto<HistoryDto[]>(null, string.Join(", ", validationResult.Errors), false);
         
-        var spaceRoom = _memoryCache.Get<SpaceRoom>(request.RoomId) ?? await _spaceRoomRepository.GetById(request.RoomId, cancellationToken);
+        var spaceRoom = _memoryCache.Get<SpaceRoom>(request.RoomId) 
+                        ?? await _spaceRoomRepository.GetById(request.RoomId, cancellationToken);
         
         if (spaceRoom != null)
             _memoryCache.Set(request.RoomId, spaceRoom);

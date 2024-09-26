@@ -25,7 +25,7 @@ public class GetRoomMatchesQueryValidator : AbstractValidator<GetRoomMatchesQuer
     {
         RuleFor(x => x.RoomId)
             .NotEmpty()
-            .WithMessage(localizer["ROOM_IS_IS_EMPTY"]);
+            .WithMessage(localizer["ROOM_ID_IS_EMPTY"]);
     }
 }
 
@@ -61,7 +61,8 @@ public class GetRoomMatchesQueryHandler : IRequestHandler<GetRoomMatchesQuery, R
         if (!validationResult.IsValid)
             return new ResultDto<HistoryDto[]>(null, string.Join(", ", validationResult.Errors), false);
         
-        var spaceRoom = _memoryCache.Get<SpaceRoom>(request.RoomId) ?? await _spaceRoomRepository.GetById(request.RoomId, cancellationToken);
+        var spaceRoom = _memoryCache.Get<SpaceRoom>(request.RoomId) 
+                        ?? await _spaceRoomRepository.GetById(request.RoomId, cancellationToken);
         
         if (spaceRoom != null)
             _memoryCache.Set(request.RoomId, spaceRoom);

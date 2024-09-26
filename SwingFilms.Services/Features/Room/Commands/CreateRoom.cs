@@ -15,28 +15,32 @@ public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, Resul
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ISpaceRoomRepository _spaceRoomRepository;
+    private readonly IUserRepository _userRepository;
     private readonly ISpaceRoomService _roomService;
-    private readonly IMemoryService _memoryService;
     private readonly IStringLocalizer<CreateRoomCommandHandler> _localizer;
     
     public CreateRoomCommandHandler(
         IHttpContextAccessor httpContextAccessor, 
         IStringLocalizer<CreateRoomCommandHandler> localizer, 
         ISpaceRoomService roomService, 
-        ISpaceRoomRepository spaceRoomRepository, 
-        IMemoryService memoryService)
+        ISpaceRoomRepository spaceRoomRepository,
+        IUserRepository userRepository)
     {
         _httpContextAccessor = httpContextAccessor;
         _localizer = localizer;
         _roomService = roomService;
         _spaceRoomRepository = spaceRoomRepository;
-        _memoryService = memoryService;
+        _userRepository = userRepository;
     }
     
     public async Task<ResultDto<string>> Handle(CreateRoomCommand request, CancellationToken cancellationToken)
     {
         var spaceRoom = new SpaceRoom();
-        User? user = await _memoryService.GetUserById(_httpContextAccessor, cancellationToken);
+        
+        var userIdString = _httpContextAccessor.HttpContext!.User.Claims
+            .FirstOrDefault(x => x.Type == ClaimTypes.Sid)!.Value;
+        
+        var user = await _userRepository.GetById(Guid.Parse(userIdString), cancellationToken);
 
         if (user != null)
         {
