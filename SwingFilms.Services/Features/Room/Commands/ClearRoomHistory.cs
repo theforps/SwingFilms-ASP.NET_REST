@@ -61,7 +61,7 @@ public class ClearRoomHistoryCommandHandler : IRequestHandler<ClearRoomHistoryCo
         if (spaceRoom != null)
             _memoryCache.Set(request.RoomId, spaceRoom);
         else
-            return new ResultDto<string>(null, _localizer["SPACE_ROOM_NOT_FOUND"], false);
+            return new ResultDto<string>(null, _localizer["ROOM_NOT_FOUND"], false);
 
         await _historyRoomRepository.ClearRoomHistory(request.RoomId, cancellationToken);
 

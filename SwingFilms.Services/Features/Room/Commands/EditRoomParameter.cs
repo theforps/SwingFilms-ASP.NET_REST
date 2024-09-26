@@ -14,6 +14,10 @@ namespace SwingFilms.Services.Features.Room.Commands;
 
 public class EditRoomParameterCommand : IRequest<ResultDto<string>>
 {
+    [Required]
+    [FromQuery]
+    public Guid RoomId { get; init; }
+    
     [FromBody]
     [Required]
     public EditParameterDto Body { get; init; }
@@ -26,7 +30,7 @@ public class EditRoomParameterCommandValidator : AbstractValidator<EditRoomParam
         RuleFor(x => x.Body)
             .NotNull();
 
-        RuleFor(x => x.Body.RoomId)
+        RuleFor(x => x.RoomId)
             .NotEmpty()
             .WithMessage(localizer["ROOM_ID_IS_EMPTY"]);
     }
@@ -61,12 +65,12 @@ public class EditRoomParameterCommandHandler : IRequestHandler<EditRoomParameter
         if (!validationResult.IsValid)
             return new ResultDto<string>(null, string.Join(", ", validationResult.Errors), false);
         
-        var spaceRoom = _memoryCache.Get<SpaceRoom>(request.Body.RoomId) ?? await _spaceRoomRepository.GetById(request.Body.RoomId, cancellationToken);
+        var spaceRoom = _memoryCache.Get<SpaceRoom>(request.RoomId) ?? await _spaceRoomRepository.GetById(request.RoomId, cancellationToken);
         
         if (spaceRoom != null)
-            _memoryCache.Set(request.Body.RoomId, spaceRoom);
+            _memoryCache.Set(request.RoomId, spaceRoom);
         else
-            return new ResultDto<string>(null, _localizer["SPACE_ROOM_NOT_FOUND"], false);
+            return new ResultDto<string>(null, _localizer["ROOM_NOT_FOUND"], false);
 
         var editedParameter = _mapper.Map<Parameter>(request.Body);
 
