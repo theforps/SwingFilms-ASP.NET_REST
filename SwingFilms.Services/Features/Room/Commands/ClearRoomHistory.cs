@@ -12,7 +12,7 @@ namespace SwingFilms.Services.Features.Room.Commands;
 
 public class ClearRoomHistoryCommand : IRequest<ResultDto<string>>
 {
-    [FromBody]
+    [FromQuery]
     [Required]
     public Guid RoomId { get; init; }
 }
