@@ -24,10 +24,26 @@ public interface ISpaceRoomRepository : IBaseRepository<SpaceRoom>
     Task UpdateParameter(Guid spaceRoomId, Parameter parameter, CancellationToken cancellationToken);
 
     /// <summary>
+    /// Получение параметров комнаты
+    /// </summary>
+    /// <param name="spaceRoomId">Идентификатор комнаты</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Параметры комнаты</returns>
+    Task<Parameter> GetParameter(Guid spaceRoomId, CancellationToken cancellationToken);
+    
+    /// <summary>
     /// Удаление пользователя из комнаты
     /// </summary>
     /// <param name="spaceRoomId">Идентификатор комнаты</param>
     /// <param name="userId">Идентификатор пользователя</param>
     /// <param name="cancellationToken">Токен отмены</param>
     Task RemoveMember(Guid spaceRoomId, Guid userId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Добавление пользователя в комнату
+    /// </summary>
+    /// <param name="spaceRoomCode">Код комнаты</param>
+    /// <param name="userId">Идентификатор пользователя</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    Task EnterUserToRoom(string spaceRoomCode, Guid userId, CancellationToken cancellationToken);
 }

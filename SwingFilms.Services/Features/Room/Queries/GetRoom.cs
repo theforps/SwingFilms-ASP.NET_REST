@@ -35,20 +35,28 @@ public class GetRoomQueryHandler : IRequestHandler<GetRoomQuery, ResultDto<Space
     private readonly IMemoryCache _memoryCache;
     private readonly IMapper _mapper;
     private readonly IStringLocalizer<GetRoomQueryHandler> _localizer;
+    private readonly IValidator<GetRoomQuery> _validator;
     
     public GetRoomQueryHandler(
         ISpaceRoomRepository spaceRoomRepository, 
         IMemoryCache memoryCache, IMapper mapper, 
-        IStringLocalizer<GetRoomQueryHandler> localizer)
+        IStringLocalizer<GetRoomQueryHandler> localizer, 
+        IValidator<GetRoomQuery> validator)
     {
         _spaceRoomRepository = spaceRoomRepository;
         _memoryCache = memoryCache;
         _mapper = mapper;
         _localizer = localizer;
+        _validator = validator;
     }
     
     public async Task<ResultDto<SpaceRoomDto>> Handle(GetRoomQuery request, CancellationToken cancellationToken)
     {
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        
+        if (!validationResult.IsValid)
+            return new ResultDto<SpaceRoomDto>(null, string.Join(", ", validationResult.Errors), false);
+        
         var spaceRoom = _memoryCache.Get<SpaceRoom>(request.RoomId) 
                    ?? await _spaceRoomRepository.GetById(request.RoomId, cancellationToken);
         

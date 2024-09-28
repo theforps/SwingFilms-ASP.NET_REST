@@ -65,6 +65,15 @@ public class SpaceRoomRepository : ISpaceRoomRepository
         await _dataContext.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task<Parameter> GetParameter(Guid spaceRoomId, CancellationToken cancellationToken)
+    {
+        var room = await _dataContext.SpaceRooms
+            .Include(spaceRoom => spaceRoom.Parameter)
+            .FirstOrDefaultAsync(x => x.Id == spaceRoomId, cancellationToken);
+        
+        return room.Parameter;
+    }
+
     public async Task RemoveMember(Guid spaceRoomId, Guid userId, CancellationToken cancellationToken)
     {
         var spaceRoom = await _dataContext.SpaceRooms
@@ -74,6 +83,17 @@ public class SpaceRoomRepository : ISpaceRoomRepository
 
         spaceRoom.Members.Remove(user);
 
+        await _dataContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task EnterUserToRoom(string roomCode, Guid userId, CancellationToken cancellationToken)
+    {
+        var user = await _dataContext.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+        
+        var room = await _dataContext.SpaceRooms.FirstOrDefaultAsync(x => x.Code.Equals(roomCode), cancellationToken);
+        
+        room.Members.Add(user);
+        
         await _dataContext.SaveChangesAsync(cancellationToken);
     }
 }

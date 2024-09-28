@@ -85,6 +85,19 @@ public class RoomController : ControllerBase
     }
     
     /// <summary>
+    /// Получение параметра комнаты
+    /// </summary>
+    /// <param name="query">Запрос</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    [HttpPost(nameof(GetRoomParameter), Name = nameof(GetRoomParameter))]
+    public async Task<ActionResult> GetRoomParameter(GetRoomParameterQuery query, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(query, cancellationToken);
+        
+        return Ok(result);
+    }
+    
+    /// <summary>
     /// Получение истории пользователя в комнате
     /// </summary>
     /// <param name="query">Запрос</param>
@@ -119,6 +132,19 @@ public class RoomController : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     [HttpPost(nameof(ClearRoomHistory), Name = nameof(ClearRoomHistory))]
     public async Task<ActionResult> ClearRoomHistory(ClearRoomHistoryCommand command, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(command, cancellationToken);
+        
+        return Ok(result);
+    }
+    
+    /// <summary>
+    /// Добавление пользователя в группу
+    /// </summary>
+    /// <param name="command">Команда</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    [HttpPost(nameof(EnterRoom), Name = nameof(EnterRoom))]
+    public async Task<ActionResult> EnterRoom(EnterRoomCommand command, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(command, cancellationToken);
         
