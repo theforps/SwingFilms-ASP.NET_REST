@@ -79,10 +79,14 @@ public class SpaceRoomRepository : ISpaceRoomRepository
         var spaceRoom = await _dataContext.SpaceRooms
             .Include(spaceRoom => spaceRoom.Members)
             .FirstOrDefaultAsync(x => x.Id == spaceRoomId, cancellationToken);
+        
         var user = spaceRoom.Members.First(x => x.Id == userId);
 
         spaceRoom.Members.Remove(user);
 
+        if (spaceRoom.Members.Count == 0)
+            await Delete(spaceRoomId, cancellationToken);
+        
         await _dataContext.SaveChangesAsync(cancellationToken);
     }
 

@@ -10,8 +10,8 @@ namespace SwingFilms.Services.Services.Implementations;
 public class MemoryService  : IMemoryService
 {
     private readonly IUserRepository _userRepository;
-    private readonly ISpaceRoomRepository _spaceRoomRepository;
     private readonly IMemoryCache _memoryCache;
+    private readonly ISpaceRoomRepository _spaceRoomRepository;
     
     public MemoryService(
         IUserRepository userRepository, 
@@ -23,7 +23,7 @@ public class MemoryService  : IMemoryService
         _spaceRoomRepository = spaceRoomRepository;
     }
     
-    public async Task<User?> GetUserById(IHttpContextAccessor httpContextAccessor, CancellationToken cancellationToken)
+    public async Task<User> GetCurrentUser(IHttpContextAccessor httpContextAccessor, CancellationToken cancellationToken)
     {
         var userIdString = httpContextAccessor.HttpContext!.User.Claims
             .FirstOrDefault(x => x.Type == ClaimTypes.Sid)!.Value;
@@ -41,9 +41,29 @@ public class MemoryService  : IMemoryService
 
         if (user != null)
         {
-            _memoryCache.Set(userIdString, user);
+            _memoryCache.Set(Guid.Parse(userIdString), user);
         }
 
         return user;
+    }
+
+    public async Task<User?> GetUserById(Guid userId, CancellationToken cancellationToken)
+    {
+        var user = _memoryCache.Get<User>(userId) 
+                   ?? await _userRepository.GetById(userId, cancellationToken);
+        
+        _memoryCache.Set(userId, user);
+
+        return user;
+    }
+
+    public async Task<SpaceRoom?> GetSpaceRoomById(Guid spaceRoomId, CancellationToken cancellationToken)
+    {
+        var room = _memoryCache.Get<SpaceRoom>(spaceRoomId) 
+            ?? await _spaceRoomRepository.GetById(spaceRoomId, cancellationToken);
+        
+        _memoryCache.Set(spaceRoomId, room, TimeSpan.FromMinutes(15));
+
+        return room;
     }
 }

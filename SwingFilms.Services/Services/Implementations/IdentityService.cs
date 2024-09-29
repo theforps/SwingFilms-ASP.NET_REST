@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SwingFilms.Infrastructure.Enums;
@@ -51,5 +52,14 @@ public class IdentityService : IIdentityService
         var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
         return jwt;
+    }
+
+    public async Task<byte[]> ConvertFormFileToByteArray(IFormFile file, CancellationToken cancellationToken)
+    {
+        using var item = new MemoryStream();
+        await file.CopyToAsync(item, cancellationToken);
+        var fileByteArray = item.ToArray();
+
+        return fileByteArray;
     }
 }

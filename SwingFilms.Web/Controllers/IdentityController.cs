@@ -35,7 +35,6 @@ public class IdentityController : ControllerBase
     /// <param name="command">Команда</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>JWT токен</returns>
-    [ApiExplorerSettings(IgnoreApi = true)]
     [HttpPost(nameof(Registration), Name = nameof(Registration))]
     public async Task<ActionResult> Registration(RegistrationSystemCommand command, CancellationToken cancellationToken)
     {

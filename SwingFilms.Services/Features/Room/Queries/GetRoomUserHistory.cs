@@ -77,7 +77,7 @@ public class GetRoomUserHistoryQueryHandler : IRequestHandler<GetRoomUserHistory
         else
             return new ResultDto<HistoryDto[]>(null, _localizer["SPACE_ROOM_NOT_FOUND"], false);
         
-        var user = await _memoryService.GetUserById(_httpContextAccessor, cancellationToken);
+        var user = await _memoryService.GetCurrentUser(_httpContextAccessor, cancellationToken);
         
         var histories = await _historyRepository.GetUserHistoryInRoom(user.Id, request.RoomId, cancellationToken);
         

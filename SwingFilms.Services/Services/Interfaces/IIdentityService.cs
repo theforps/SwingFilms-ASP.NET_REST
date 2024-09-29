@@ -1,4 +1,5 @@
-﻿using SwingFilms.Infrastructure.Enums;
+﻿using Microsoft.AspNetCore.Http;
+using SwingFilms.Infrastructure.Enums;
 
 namespace SwingFilms.Services.Services.Interfaces;
 
@@ -27,6 +28,15 @@ public interface IIdentityService
     /// </summary>
     /// <param name="userId">Уникальный идентификатор пользователя</param>
     /// <param name="userRole">Роль пользователя</param>
+    /// <param name="telegramUserId">Telegram User Id</param>
     /// <returns>Созданный JWT токен</returns>
     string CreateTokenJwt(UserRole userRole, Guid userId = default, int telegramUserId = default);
+
+    /// <summary>
+    /// Конвертация IFormFile в массив байтов
+    /// </summary>
+    /// <param name="file">Загружаемый файл</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Массив байтов</returns>
+    Task<byte[]> ConvertFormFileToByteArray(IFormFile file, CancellationToken cancellationToken);
 }

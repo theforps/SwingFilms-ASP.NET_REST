@@ -150,4 +150,17 @@ public class RoomController : ControllerBase
         
         return Ok(result);
     }
+    
+    /// <summary>
+    /// Выход/удаление пользователя из группы
+    /// </summary>
+    /// <param name="command">Команда</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    [HttpPost(nameof(ExitRoom), Name = nameof(ExitRoom))]
+    public async Task<ActionResult> ExitRoom(ExitRoomCommand command, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(command, cancellationToken);
+        
+        return Ok(result);
+    }
 }
