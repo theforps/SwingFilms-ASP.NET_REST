@@ -12,8 +12,14 @@ using SwingFilms.Services.Features.Identity.DtoModels;
 
 namespace SwingFilms.Services.Features.Identity.Queries;
 
-public class GetUserInfoQuery : IRequest<ResultDto<UserInfoDto>>
+/// <summary>
+/// Получение информации о пользователе
+/// </summary>
+public sealed record GetUserInfoQuery : IRequest<ResultDto<UserInfoDto>>
 {
+    /// <summary>
+    /// Уникальный идентификатор пользователя
+    /// </summary>
     [FromQuery]
     [Required]
     public Guid UserId { get; init; }

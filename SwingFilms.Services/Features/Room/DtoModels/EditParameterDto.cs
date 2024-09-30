@@ -1,11 +1,23 @@
 ﻿namespace SwingFilms.Services.Features.Room.DtoModels;
 
 // TODO изменить после подобранного API
+/// <summary>
+/// DTO для редактирования параметров комнаты
+/// </summary>
 public sealed record EditParameterDto
 {
-    public string Genre { get; set; }
+    /// <summary>
+    /// Жанр
+    /// </summary>
+    public string Genre { get; init; }
     
-    public string Year { get; set; }
+    /// <summary>
+    /// Год
+    /// </summary>
+    public string Year { get; init; }
     
-    public string Type { get; set; }
+    /// <summary>
+    /// Тип фильма
+    /// </summary>
+    public string Type { get; init; }
 }

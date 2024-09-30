@@ -11,8 +11,14 @@ using SwingFilms.Services.Features.Room.Queries;
 
 namespace SwingFilms.Services.Features.Room.Commands;
 
-public class EnterRoomCommand : IRequest<ResultDto<string>>
+/// <summary>
+/// Вход пользователя в комнату
+/// </summary>
+public sealed record EnterRoomCommand : IRequest<ResultDto<string>>
 {
+    /// <summary>
+    /// Код комнаты
+    /// </summary>
     [Required]
     [FromQuery]
     public string RoomCode { get; init; }

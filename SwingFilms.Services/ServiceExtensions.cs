@@ -2,6 +2,7 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using SwingFilms.Services.Features.Identity.Commands;
+using SwingFilms.Services.Features.Identity.Queries;
 using SwingFilms.Services.Features.Room.Commands;
 using SwingFilms.Services.Features.Room.Queries;
 using SwingFilms.Services.Mapper;
@@ -43,12 +44,20 @@ public static class ServiceExtensions
     {
         services.AddValidatorsFromAssemblyContaining<LoginSystemCommandValidator>();
         services.AddValidatorsFromAssemblyContaining<RegistrationSystemCommandValidator>();
-        services.AddValidatorsFromAssemblyContaining<ClearRoomHistoryCommandValidator>();
-        services.AddValidatorsFromAssemblyContaining<EditRoomParameterCommandValidator>();
+        services.AddValidatorsFromAssemblyContaining<GetUserInfoQueryValidator>();
+        
+        services.AddValidatorsFromAssemblyContaining<ClearHistoryRoomCommandValidator>();
+        services.AddValidatorsFromAssemblyContaining<EditParameterRoomCommandValidator>();
+        services.AddValidatorsFromAssemblyContaining<DeleteRoomCommandValidator>();
+        services.AddValidatorsFromAssemblyContaining<EnterRoomCommandValidator>();
+        services.AddValidatorsFromAssemblyContaining<ExitRoomCommandValidator>();
+        
         services.AddValidatorsFromAssemblyContaining<GetRoomMatchesQueryValidator>();
         services.AddValidatorsFromAssemblyContaining<GetRoomUserHistoryQueryValidator>();
+        services.AddValidatorsFromAssemblyContaining<GetRoomQueryValidator>();
+        services.AddValidatorsFromAssemblyContaining<GetRoomParameterQueryValidator>();
+        services.AddValidatorsFromAssemblyContaining<GetRoomsQueryValidator>();
     }
-    
         
     public static void AddServiceMemoryCache(this IServiceCollection services)
     {

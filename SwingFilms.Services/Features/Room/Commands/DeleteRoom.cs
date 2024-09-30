@@ -10,8 +10,14 @@ using SwingFilms.Services.Features.Identity.Queries;
 
 namespace SwingFilms.Services.Features.Room.Commands;
 
-public class DeleteRoomCommand : IRequest<ResultDto<string>>
+/// <summary>
+/// Удаление комнаты
+/// </summary>
+public sealed record DeleteRoomCommand : IRequest<ResultDto<string>>
 {
+    /// <summary>
+    /// Уникальный идентификатор комнаты
+    /// </summary>
     [Required]
     [FromQuery]
     public Guid RoomId { get; init; }

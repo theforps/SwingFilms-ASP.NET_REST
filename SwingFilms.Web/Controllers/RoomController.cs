@@ -20,13 +20,13 @@ public class RoomController : ControllerBase
     /// <summary>
     /// Получение комнат пользователя
     /// </summary>
-    /// <param name="command">Команда</param>
+    /// <param name="query">Запрос</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Комнаты</returns>
     [HttpGet(nameof(GetRooms), Name = nameof(GetRooms))]
-    public async Task<ActionResult> GetRooms(GetRoomsQuery command, CancellationToken cancellationToken)
+    public async Task<ActionResult> GetRooms(GetRoomsQuery query, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(command, cancellationToken);
+        var result = await _mediator.Send(query, cancellationToken);
         
         return Ok(result);
     }
@@ -34,13 +34,13 @@ public class RoomController : ControllerBase
     /// <summary>
     /// Получение комнаты
     /// </summary>
-    /// <param name="command">Команда</param>
+    /// <param name="query">Запрос</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Комната</returns>
     [HttpGet(nameof(GetRoom), Name = nameof(GetRoom))]
-    public async Task<ActionResult> GetRoom(GetRoomQuery command, CancellationToken cancellationToken)
+    public async Task<ActionResult> GetRoom(GetRoomQuery query, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(command, cancellationToken);
+        var result = await _mediator.Send(query, cancellationToken);
         
         return Ok(result);
     }
@@ -76,8 +76,8 @@ public class RoomController : ControllerBase
     /// </summary>
     /// <param name="command">Команда</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    [HttpPost(nameof(EditRoomParameter), Name = nameof(EditRoomParameter))]
-    public async Task<ActionResult> EditRoomParameter(EditRoomParameterCommand command, CancellationToken cancellationToken)
+    [HttpPut(nameof(EditParameterRoom), Name = nameof(EditParameterRoom))]
+    public async Task<ActionResult> EditParameterRoom(EditParameterRoomCommand command, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(command, cancellationToken);
         
@@ -130,8 +130,8 @@ public class RoomController : ControllerBase
     /// </summary>
     /// <param name="command">Команда</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    [HttpPost(nameof(ClearRoomHistory), Name = nameof(ClearRoomHistory))]
-    public async Task<ActionResult> ClearRoomHistory(ClearRoomHistoryCommand command, CancellationToken cancellationToken)
+    [HttpPost(nameof(ClearHistoryRoom), Name = nameof(ClearHistoryRoom))]
+    public async Task<ActionResult> ClearHistoryRoom(ClearHistoryRoomCommand command, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(command, cancellationToken);
         

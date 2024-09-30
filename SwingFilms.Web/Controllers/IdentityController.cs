@@ -43,10 +43,16 @@ public class IdentityController : ControllerBase
         return Ok(result);
     }
     
+    /// <summary>
+    /// Получение информации о пользователе
+    /// </summary>
+    /// <param name="query">Запрос</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о пользователе</returns>
     [HttpGet(nameof(GetUserInfo), Name = nameof(GetUserInfo))]
-    public async Task<ActionResult> GetUserInfo(GetUserInfoQuery command, CancellationToken cancellationToken)
+    public async Task<ActionResult> GetUserInfo(GetUserInfoQuery query, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(command, cancellationToken);
+        var result = await _mediator.Send(query, cancellationToken);
         
         return Ok(result);
     }

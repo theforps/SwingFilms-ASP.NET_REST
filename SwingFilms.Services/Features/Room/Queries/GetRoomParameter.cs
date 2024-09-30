@@ -12,8 +12,14 @@ using SwingFilms.Services.Features.Room.DtoModels;
 
 namespace SwingFilms.Services.Features.Room.Queries;
 
-public class GetRoomParameterQuery : IRequest<ResultDto<ParameterDto>>
+/// <summary>
+/// Получение параметров комнаты
+/// </summary>
+public sealed record GetRoomParameterQuery : IRequest<ResultDto<ParameterDto>>
 {
+    /// <summary>
+    /// Уникальный идентификатор комнаты
+    /// </summary>
     [Required]
     [FromQuery]
     public Guid RoomId { get; init; }

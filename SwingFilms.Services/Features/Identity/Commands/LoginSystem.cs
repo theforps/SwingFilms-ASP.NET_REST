@@ -12,11 +12,10 @@ using SwingFilms.Services.Services.Interfaces;
 
 namespace SwingFilms.Services.Features.Identity.Commands;
 
-// TODO доделать команду и подключить
 /// <summary>
 /// Вход пользователя в систему
 /// </summary>
-public class LoginSystemCommand : IRequest<ResultDto<string>>
+public sealed record LoginSystemCommand : IRequest<ResultDto<string>>
 {
     /// <summary>
     /// DTO для входа в систему
@@ -26,9 +25,6 @@ public class LoginSystemCommand : IRequest<ResultDto<string>>
     public LoginUserDto Body { get; set; }
 }
 
-/// <summary>
-/// Валидация входных данных
-/// </summary>
 public class LoginSystemCommandValidator : AbstractValidator<LoginSystemCommand>
 {
     public LoginSystemCommandValidator(IStringLocalizer<LoginSystemCommandValidator> localizer)
@@ -50,9 +46,6 @@ public class LoginSystemCommandValidator : AbstractValidator<LoginSystemCommand>
     }
 }
 
-/// <summary>
-/// Обработчик входа в систему
-/// </summary>
 public class LoginSystemCommandHandler : IRequestHandler<LoginSystemCommand, ResultDto<string>>
 {
     private readonly IStringLocalizer<LoginSystemCommandHandler> _localizer;

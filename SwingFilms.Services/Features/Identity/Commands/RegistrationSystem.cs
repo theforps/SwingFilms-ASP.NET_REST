@@ -12,8 +12,14 @@ using SwingFilms.Services.Services.Interfaces;
 
 namespace SwingFilms.Services.Features.Identity.Commands;
 
-public class RegistrationSystemCommand : IRequest<ResultDto<string>>
+/// <summary>
+/// Регистрация пользователя в системе
+/// </summary>
+public sealed record RegistrationSystemCommand : IRequest<ResultDto<string>>
 {
+    /// <summary>
+    /// DTO для регистрации в системе
+    /// </summary>
     [Required]
     [FromForm]
     public RegistrationUserDto Body { get; init; }
@@ -50,7 +56,6 @@ public class RegistrationSystemCommandHandler : IRequestHandler<RegistrationSyst
 
     public RegistrationSystemCommandHandler(
         IUserRepository userRepository, 
-        
         IValidator<RegistrationSystemCommand> validator, 
         IStringLocalizer<RegistrationSystemCommandHandler> localizer, 
         IIdentityService identityService, 

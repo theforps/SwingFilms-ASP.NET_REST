@@ -9,7 +9,10 @@ using SwingFilms.Services.Services.Interfaces;
 
 namespace SwingFilms.Services.Features.Room.Commands;
 
-public class CreateRoomCommand : IRequest<ResultDto<string>>;
+/// <summary>
+/// Создание комнаты
+/// </summary>
+public sealed record CreateRoomCommand : IRequest<ResultDto<string>>;
 
 public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, ResultDto<string>>
 {

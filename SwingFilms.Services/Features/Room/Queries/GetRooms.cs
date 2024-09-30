@@ -10,8 +10,14 @@ using SwingFilms.Services.Features.Room.DtoModels;
 
 namespace SwingFilms.Services.Features.Room.Queries;
 
-public class GetRoomsQuery : IRequest<ResultDto<SpaceRoomDto[]>>
+/// <summary>
+/// Получение информации о комнатах
+/// </summary>
+public sealed record GetRoomsQuery : IRequest<ResultDto<SpaceRoomDto[]>>
 {
+    /// <summary>
+    /// Уникальный идентификатор пользователя
+    /// </summary>
     [FromQuery]
     [Required]
     public Guid UserId { get; init; }

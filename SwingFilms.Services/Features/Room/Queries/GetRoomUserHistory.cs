@@ -14,8 +14,14 @@ using SwingFilms.Services.Services.Interfaces;
 
 namespace SwingFilms.Services.Features.Room.Queries;
 
-public class GetRoomUserHistoryQuery : IRequest<ResultDto<HistoryDto[]>>
+/// <summary>
+/// Получение истории пользователя в комнате
+/// </summary>
+public sealed record GetRoomUserHistoryQuery : IRequest<ResultDto<HistoryDto[]>>
 {
+    /// <summary>
+    /// Уникальный идентификатор комнаты
+    /// </summary>
     [FromQuery]
     [Required]
     public Guid RoomId { get; init; }

@@ -12,8 +12,14 @@ using SwingFilms.Services.Features.Room.DtoModels;
 
 namespace SwingFilms.Services.Features.Room.Queries;
 
-public class GetRoomMatchesQuery : IRequest<ResultDto<HistoryDto[]>>
+/// <summary>
+/// Получение совпадений в комнате
+/// </summary>
+public sealed record GetRoomMatchesQuery : IRequest<ResultDto<HistoryDto[]>>
 {
+    /// <summary>
+    /// Уникальный идентификатор комнаты
+    /// </summary>
     [FromQuery]
     [Required]
     public Guid RoomId { get; init; }

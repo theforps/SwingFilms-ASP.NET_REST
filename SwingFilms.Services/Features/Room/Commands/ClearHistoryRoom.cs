@@ -10,16 +10,22 @@ using SwingFilms.Services.DtoModels;
 
 namespace SwingFilms.Services.Features.Room.Commands;
 
-public class ClearRoomHistoryCommand : IRequest<ResultDto<string>>
+/// <summary>
+/// Очистка истории комнаты
+/// </summary>
+public sealed record ClearHistoryRoomCommand : IRequest<ResultDto<string>>
 {
+    /// <summary>
+    /// Уникальный идентификатор комнаты
+    /// </summary>
     [FromQuery]
     [Required]
     public Guid RoomId { get; init; }
 }
 
-public class ClearRoomHistoryCommandValidator : AbstractValidator<ClearRoomHistoryCommand>
+public class ClearHistoryRoomCommandValidator : AbstractValidator<ClearHistoryRoomCommand>
 {
-    public ClearRoomHistoryCommandValidator(IStringLocalizer<ClearRoomHistoryCommandValidator> localizer)
+    public ClearHistoryRoomCommandValidator(IStringLocalizer<ClearHistoryRoomCommandValidator> localizer)
     {
         RuleFor(x => x.RoomId)
             .NotEmpty()
@@ -27,17 +33,17 @@ public class ClearRoomHistoryCommandValidator : AbstractValidator<ClearRoomHisto
     }
 }
 
-public class ClearRoomHistoryCommandHandler : IRequestHandler<ClearRoomHistoryCommand, ResultDto<string>>
+public class ClearHistoryRoomCommandHandler : IRequestHandler<ClearHistoryRoomCommand, ResultDto<string>>
 {
-    private readonly IValidator<ClearRoomHistoryCommand> _validator;
+    private readonly IValidator<ClearHistoryRoomCommand> _validator;
     private readonly IMemoryCache _memoryCache;
     private readonly ISpaceRoomRepository _spaceRoomRepository;
     private readonly IHistoryRoomRepository _historyRoomRepository;
-    private readonly IStringLocalizer<ClearRoomHistoryCommandHandler> _localizer;
+    private readonly IStringLocalizer<ClearHistoryRoomCommandHandler> _localizer;
 
-    public ClearRoomHistoryCommandHandler(
-        IValidator<ClearRoomHistoryCommand> validator,
-        IStringLocalizer<ClearRoomHistoryCommandHandler> localizer,
+    public ClearHistoryRoomCommandHandler(
+        IValidator<ClearHistoryRoomCommand> validator,
+        IStringLocalizer<ClearHistoryRoomCommandHandler> localizer,
         ISpaceRoomRepository spaceRoomRepository,
         IMemoryCache memoryCache,
         IHistoryRoomRepository historyRoomRepository)
@@ -49,7 +55,7 @@ public class ClearRoomHistoryCommandHandler : IRequestHandler<ClearRoomHistoryCo
         _historyRoomRepository = historyRoomRepository;
     }
 
-    public async Task<ResultDto<string>> Handle(ClearRoomHistoryCommand request, CancellationToken cancellationToken)
+    public async Task<ResultDto<string>> Handle(ClearHistoryRoomCommand request, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         

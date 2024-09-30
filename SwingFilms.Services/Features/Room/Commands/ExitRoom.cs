@@ -11,14 +11,23 @@ using SwingFilms.Services.Services.Interfaces;
 
 namespace SwingFilms.Services.Features.Room.Commands;
 
-public class ExitRoomCommand : IRequest<ResultDto<string>>
+/// <summary>
+/// Выход пользователя из комнаты
+/// </summary>
+public sealed record ExitRoomCommand : IRequest<ResultDto<string>>
 {
+    /// <summary>
+    /// Уникальный идентификатор комнаты
+    /// </summary>
     [Required]
     [FromQuery]
     public Guid RoomId { get; init; }
     
+    /// <summary>
+    /// Уникальный идентификатор пользователя
+    /// </summary>
     [Required]
-    [FromBody]
+    [FromQuery]
     public Guid UserId { get; init; }
 }
 
