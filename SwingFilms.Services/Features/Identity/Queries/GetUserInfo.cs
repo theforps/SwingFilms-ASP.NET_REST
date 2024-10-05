@@ -3,12 +3,10 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
-using SwingFilms.Infrastructure.Models;
-using SwingFilms.Infrastructure.Repository.Interfaces;
 using SwingFilms.Services.DtoModels;
 using SwingFilms.Services.Features.Identity.DtoModels;
+using SwingFilms.Services.Services.Interfaces;
 
 namespace SwingFilms.Services.Features.Identity.Queries;
 
@@ -37,24 +35,21 @@ public class GetUserInfoQueryValidator : AbstractValidator<GetUserInfoQuery>
 
 public class GetUserInfoQueryHandler : IRequestHandler<GetUserInfoQuery, ResultDto<UserInfoDto>>
 {
-    private readonly IUserRepository _userRepository;
-    private readonly IMemoryCache _memoryCache;
     private readonly IMapper _mapper;
+    private readonly IMemoryService _memoryService;
     private readonly IValidator<GetUserInfoQuery> _validator;
     private readonly IStringLocalizer<GetUserInfoQueryHandler> _localizer;
     
     public GetUserInfoQueryHandler(
         IValidator<GetUserInfoQuery> validator, 
         IStringLocalizer<GetUserInfoQueryHandler> localizer,
-        IMapper mapper, 
-        IUserRepository userRepository, 
-        IMemoryCache memoryCache)
+        IMapper mapper,
+        IMemoryService memoryService)
     {
         _validator = validator;
         _localizer = localizer;
         _mapper = mapper;
-        _userRepository = userRepository;
-        _memoryCache = memoryCache;
+        _memoryService = memoryService;
     }
 
     public async Task<ResultDto<UserInfoDto>> Handle(GetUserInfoQuery request, CancellationToken cancellationToken)
@@ -64,13 +59,10 @@ public class GetUserInfoQueryHandler : IRequestHandler<GetUserInfoQuery, ResultD
         if (!validationResult.IsValid)
             return new ResultDto<UserInfoDto>(null, string.Join(", ", validationResult.Errors), false);
 
-        var user = _memoryCache.Get<User>(request.UserId)
-            ?? await _userRepository.GetById(request.UserId, cancellationToken);
+        var user = await _memoryService.GetUserById(request.UserId, cancellationToken);
 
         if (user == null)
-            return new ResultDto<UserInfoDto>(null, _localizer["USER_NOT_FOUND"]);
-
-        _memoryCache.Set(request.UserId, user);
+            return new ResultDto<UserInfoDto>(null, _localizer["USER_WAS_NOT_FOUND", request.UserId], false);
         
         var userDto = _mapper.Map<UserInfoDto>(user);
         

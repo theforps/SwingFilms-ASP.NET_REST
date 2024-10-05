@@ -100,4 +100,11 @@ public class SpaceRoomRepository : ISpaceRoomRepository
         
         await _dataContext.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<SpaceRoom> GetByCode(string spaceRoomCode, CancellationToken cancellationToken)
+    {
+        var room = await _dataContext.SpaceRooms.FirstOrDefaultAsync(x => x.Code.Equals(spaceRoomCode), cancellationToken);
+
+        return room;
+    }
 }

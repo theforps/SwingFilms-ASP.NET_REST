@@ -79,7 +79,7 @@ public class RegistrationSystemCommandHandler : IRequestHandler<RegistrationSyst
 
         if (existingUser != null)
         {
-            return new ResultDto<string>(null, _localizer["USER_ALREADY_EXISTS"], false);
+            return new ResultDto<string>(null, _localizer["USER_ALREADY_EXISTS", request.Body.Login], false);
         }
 
         var user = _mapper.Map<User>(request.Body);

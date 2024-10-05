@@ -4,9 +4,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
-using SwingFilms.Infrastructure.Models;
 using SwingFilms.Infrastructure.Repository.Interfaces;
 using SwingFilms.Services.DtoModels;
 using SwingFilms.Services.Features.Room.DtoModels;
@@ -42,8 +40,6 @@ public class GetRoomUserHistoryQueryHandler : IRequestHandler<GetRoomUserHistory
     private readonly IValidator<GetRoomUserHistoryQuery> _validator;
     private readonly IMemoryService _memoryService;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IMemoryCache _memoryCache;
-    private readonly ISpaceRoomRepository _spaceRoomRepository;
     private readonly IHistoryRoomRepository _historyRepository;
     private readonly IMapper _mapper;
     private readonly IStringLocalizer<GetRoomUserHistoryQueryHandler> _localizer;
@@ -53,8 +49,6 @@ public class GetRoomUserHistoryQueryHandler : IRequestHandler<GetRoomUserHistory
         IStringLocalizer<GetRoomUserHistoryQueryHandler> localizer, 
         IMemoryService memoryService, 
         IHttpContextAccessor httpContextAccessor, 
-        ISpaceRoomRepository spaceRoomRepository, 
-        IMemoryCache memoryCache, 
         IHistoryRoomRepository historyRepository, 
         IMapper mapper)
     {
@@ -62,8 +56,6 @@ public class GetRoomUserHistoryQueryHandler : IRequestHandler<GetRoomUserHistory
         _localizer = localizer;
         _memoryService = memoryService;
         _httpContextAccessor = httpContextAccessor;
-        _spaceRoomRepository = spaceRoomRepository;
-        _memoryCache = memoryCache;
         _historyRepository = historyRepository;
         _mapper = mapper;
     }
@@ -74,14 +66,11 @@ public class GetRoomUserHistoryQueryHandler : IRequestHandler<GetRoomUserHistory
         
         if (!validationResult.IsValid)
             return new ResultDto<HistoryDto[]>(null, string.Join(", ", validationResult.Errors), false);
+
+        var spaceRoom = await _memoryService.GetSpaceRoomById(request.RoomId, cancellationToken);
         
-        var spaceRoom = _memoryCache.Get<SpaceRoom>(request.RoomId) 
-                        ?? await _spaceRoomRepository.GetById(request.RoomId, cancellationToken);
-        
-        if (spaceRoom != null)
-            _memoryCache.Set(request.RoomId, spaceRoom);
-        else
-            return new ResultDto<HistoryDto[]>(null, _localizer["SPACE_ROOM_NOT_FOUND"], false);
+        if (spaceRoom == null)
+            return new ResultDto<HistoryDto[]>(null, _localizer["ROOM_WAS_NOT_FOUND", request.RoomId], false);
         
         var user = await _memoryService.GetCurrentUser(_httpContextAccessor, cancellationToken);
         

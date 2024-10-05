@@ -103,10 +103,10 @@ public class LoginSystemCommandHandler : IRequestHandler<LoginSystemCommand, Res
                 user = await _userRepository.GetByLogin(request.Body.Login, cancellationToken);
                 
                 if (user == null)
-                    return new ResultDto<string>(null, _localizer["LOGIN_IS_WRONG"], false);
+                    return new ResultDto<string>(null, _localizer["LOGIN_IS_WRONG", request.Body.Login], false);
                 
                 if (!_identityService.VerifyPassword(request.Body.Password, user.Password!))
-                            return new ResultDto<string>(null, _localizer["PASSWORD_IS_WRONG"], false);
+                            return new ResultDto<string>(null, _localizer["PASSWORD_IS_WRONG", request.Body.Password], false);
             }
         }
         

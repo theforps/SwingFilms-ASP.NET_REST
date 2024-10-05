@@ -79,7 +79,7 @@ public class EditParameterRoomCommandHandler : IRequestHandler<EditParameterRoom
         if (spaceRoom != null)
             _memoryCache.Set(request.RoomId, spaceRoom);
         else
-            return new ResultDto<string>(null, _localizer["ROOM_NOT_FOUND"], false);
+            return new ResultDto<string>(null, _localizer["ROOM_WAS_NOT_FOUND", request.RoomId], false);
 
         var editedParameter = _mapper.Map<Parameter>(request.Body);
 

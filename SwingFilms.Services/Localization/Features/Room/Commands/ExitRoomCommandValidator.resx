@@ -12,13 +12,10 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="LOGIN_IS_EMPTY" xml:space="preserve">
-        <value>Логин обязателен для ввода</value>
+    <data name="ROOM_ID_IS_EMPTY" xml:space="preserve">
+        <value>Идентификатор комнаты обязателен</value>
     </data>
-    <data name="PASSWORD_IS_EMPTY" xml:space="preserve">
-        <value>Пароль обязателен для ввода</value>
-    </data>
-    <data name="TELEGRAM_ID_IS_EMPTY" xml:space="preserve">
-        <value>Telegram идентификатор обязателен</value>
+    <data name="USER_ID_IS_EMPTY" xml:space="preserve">
+        <value>Идентификатор пользователя обязателен</value>
     </data>
 </root>

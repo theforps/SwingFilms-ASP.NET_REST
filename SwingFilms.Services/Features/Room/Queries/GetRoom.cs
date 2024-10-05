@@ -62,7 +62,7 @@ public class GetRoomQueryHandler : IRequestHandler<GetRoomQuery, ResultDto<Space
         var spaceRoom = await _memoryService.GetSpaceRoomById(request.RoomId, cancellationToken);
         
         if (spaceRoom == null)
-            return new ResultDto<SpaceRoomDto>(null, _localizer["SPACE_ROOM_NOT_FOUND"], false);
+            return new ResultDto<SpaceRoomDto>(null, _localizer["ROOM_WAS_NOT_FOUND", request.RoomId], false);
         
         var spaceRoomDto = _mapper.Map<SpaceRoomDto>(spaceRoom);
         

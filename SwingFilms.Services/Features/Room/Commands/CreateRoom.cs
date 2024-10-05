@@ -54,7 +54,7 @@ public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, Resul
         }
         else
         {
-            return new ResultDto<string>(null, _localizer["USER_NOT_FOUND"], false);
+            return new ResultDto<string>(null, _localizer["USER_WAS_NOT_FOUND", userIdString], false);
         }
 
         await _spaceRoomRepository.Add(spaceRoom, cancellationToken);

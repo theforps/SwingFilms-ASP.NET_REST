@@ -65,10 +65,7 @@ builder.Services.AddServiceFluentValidation();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Product"))
-{
-    app.UseSwagger().UseSwaggerUI();
-}
+app.UseSwagger().UseSwaggerUI();
 
 app.UseAuthentication();
 app.UseAuthorization();

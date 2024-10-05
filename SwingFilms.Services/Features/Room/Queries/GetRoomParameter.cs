@@ -3,12 +3,11 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
-using SwingFilms.Infrastructure.Models;
 using SwingFilms.Infrastructure.Repository.Interfaces;
 using SwingFilms.Services.DtoModels;
 using SwingFilms.Services.Features.Room.DtoModels;
+using SwingFilms.Services.Services.Interfaces;
 
 namespace SwingFilms.Services.Features.Room.Queries;
 
@@ -37,24 +36,24 @@ public class GetRoomParameterQueryValidator : AbstractValidator<GetRoomParameter
 
 public class GetRoomParameterQueryHandler : IRequestHandler<GetRoomParameterQuery, ResultDto<ParameterDto>>
 {
-    private readonly IMemoryCache _memoryCache;
     private readonly ISpaceRoomRepository _spaceRoomRepository;
     private readonly IMapper _mapper;
+    private readonly IMemoryService _memoryService;
     private readonly IValidator<GetRoomParameterQuery> _validator;
     private readonly IStringLocalizer<GetRoomParameterQueryHandler> _localizer;
     
     public GetRoomParameterQueryHandler(
-        IMemoryCache memoryCache, 
         ISpaceRoomRepository spaceRoomRepository, 
         IMapper mapper, 
         IStringLocalizer<GetRoomParameterQueryHandler> localizer, 
-        IValidator<GetRoomParameterQuery> validator)
+        IValidator<GetRoomParameterQuery> validator, 
+        IMemoryService memoryService)
     {
-        _memoryCache = memoryCache;
         _spaceRoomRepository = spaceRoomRepository;
         _mapper = mapper;
         _localizer = localizer;
         _validator = validator;
+        _memoryService = memoryService;
     }
     
     public async Task<ResultDto<ParameterDto>> Handle(GetRoomParameterQuery request, CancellationToken cancellationToken)
@@ -63,12 +62,11 @@ public class GetRoomParameterQueryHandler : IRequestHandler<GetRoomParameterQuer
         
         if (!validationResult.IsValid)
             return new ResultDto<ParameterDto>(null, string.Join(", ", validationResult.Errors), false);
-        
-        var spaceRoom = _memoryCache.Get<SpaceRoom>(request.RoomId) 
-                        ?? await _spaceRoomRepository.GetById(request.RoomId, cancellationToken);
+
+        var spaceRoom = await _memoryService.GetSpaceRoomById(request.RoomId, cancellationToken);
         
         if (spaceRoom == null)
-            return new ResultDto<ParameterDto>(null, _localizer["SPACE_ROOM_NOT_FOUND"], false);
+            return new ResultDto<ParameterDto>(null, _localizer["ROOM_WAS_NOT_FOUND", request.RoomId], false);
         
         var roomParameter = await _spaceRoomRepository.GetParameter(request.RoomId, cancellationToken);
         

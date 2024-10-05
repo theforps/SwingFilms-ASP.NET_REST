@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using SwingFilms.Infrastructure.Repository.Interfaces;
 using SwingFilms.Services.DtoModels;
-using SwingFilms.Services.Features.Room.Queries;
 
 namespace SwingFilms.Services.Features.Room.Commands;
 
@@ -39,15 +38,18 @@ public class EnterRoomCommandHandler : IRequestHandler<EnterRoomCommand, ResultD
     private readonly IValidator<EnterRoomCommand> _validator;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ISpaceRoomRepository _spaceRoomRepository;
+    private readonly IStringLocalizer<EnterRoomCommandHandler> _localizer;
     
     public EnterRoomCommandHandler(
         IValidator<EnterRoomCommand> validator, 
         IHttpContextAccessor httpContextAccessor, 
-        ISpaceRoomRepository spaceRoomRepository)
+        ISpaceRoomRepository spaceRoomRepository, 
+        IStringLocalizer<EnterRoomCommandHandler> localizer)
     {
         _validator = validator;
         _httpContextAccessor = httpContextAccessor;
         _spaceRoomRepository = spaceRoomRepository;
+        _localizer = localizer;
     }
     
     public async Task<ResultDto<string>> Handle(EnterRoomCommand request, CancellationToken cancellationToken)
@@ -59,6 +61,11 @@ public class EnterRoomCommandHandler : IRequestHandler<EnterRoomCommand, ResultD
         
         var userIdString = _httpContextAccessor.HttpContext!.User.Claims
             .FirstOrDefault(x => x.Type == ClaimTypes.Sid)!.Value;
+
+        var room = await _spaceRoomRepository.GetByCode(request.RoomCode, cancellationToken);
+
+        if (room == null)
+            return new ResultDto<string>(null, _localizer["ROOM_WAS_NOT_FOUND", request.RoomCode], false);
         
         await _spaceRoomRepository.EnterUserToRoom(request.RoomCode, Guid.Parse(userIdString), cancellationToken);
         

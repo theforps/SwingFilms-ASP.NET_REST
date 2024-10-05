@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
@@ -78,14 +77,14 @@ public class ExitRoomCommandHandler : IRequestHandler<ExitRoomCommand, ResultDto
 
         if (user == null)
         {
-            return new ResultDto<string>(null, _localizer["USER_NOT_FOUND"], false);
+            return new ResultDto<string>(null, _localizer["USER_WAS_NOT_FOUND", request.UserId], false);
         }
         
         var room = await _memoryService.GetSpaceRoomById(request.RoomId, cancellationToken);
 
         if (room == null)
         {
-            return new ResultDto<string>(null, _localizer["SPACE_ROOM_NOT_FOUND"], false);
+            return new ResultDto<string>(null, _localizer["ROOM_WAS_NOT_FOUND", request.RoomId], false);
         }
         
         await _spaceRoomRepository.RemoveMember(request.RoomId, request.UserId, cancellationToken);

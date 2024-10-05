@@ -38,15 +38,18 @@ public class DeleteRoomCommandHandler : IRequestHandler<DeleteRoomCommand, Resul
     private readonly ISpaceRoomRepository _spaceRoomRepository;
     private readonly IMemoryCache _memoryCache;
     private readonly IValidator<DeleteRoomCommand> _validator;
+    private readonly IStringLocalizer<DeleteRoomCommandHandler> _localizer;
     
     public DeleteRoomCommandHandler(
         ISpaceRoomRepository spaceRoomRepository, 
         IMemoryCache memoryCache, 
-        IValidator<DeleteRoomCommand> validator)
+        IValidator<DeleteRoomCommand> validator, 
+        IStringLocalizer<DeleteRoomCommandHandler> localizer)
     {
         _spaceRoomRepository = spaceRoomRepository;
         _memoryCache = memoryCache;
         _validator = validator;
+        _localizer = localizer;
     }
 
     public async Task<ResultDto<string>> Handle(DeleteRoomCommand request, CancellationToken cancellationToken)
@@ -55,6 +58,11 @@ public class DeleteRoomCommandHandler : IRequestHandler<DeleteRoomCommand, Resul
 
         if (!validationResult.IsValid)
             return new ResultDto<string>(null, string.Join(", ", validationResult.Errors), false);
+
+        var room = await _spaceRoomRepository.GetById(request.RoomId, cancellationToken);
+
+        if (room == null)
+            return new ResultDto<string>(null, _localizer["ROOM_WAS_NOT_FOUND", request.RoomId], false);
         
         await _spaceRoomRepository.Delete(request.RoomId, cancellationToken);
 

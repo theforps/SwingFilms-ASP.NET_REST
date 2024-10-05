@@ -46,4 +46,12 @@ public interface ISpaceRoomRepository : IBaseRepository<SpaceRoom>
     /// <param name="userId">Идентификатор пользователя</param>
     /// <param name="cancellationToken">Токен отмены</param>
     Task EnterUserToRoom(string spaceRoomCode, Guid userId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Получение комнаты с помощью кода
+    /// </summary>
+    /// <param name="spaceRoomCode">Код комнаты</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Комната</returns>
+    Task<SpaceRoom?> GetByCode(string spaceRoomCode, CancellationToken cancellationToken);
 }

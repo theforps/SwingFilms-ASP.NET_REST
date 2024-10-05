@@ -18,7 +18,7 @@
     <data name="PASSWORD_IS_EMPTY" xml:space="preserve">
         <value>Пароль обязателен для ввода</value>
     </data>
-    <data name="TELEGRAM_ID_IS_EMPTY" xml:space="preserve">
-        <value>Telegram идентификатор обязателен</value>
+    <data name="ROLE_IS_EMPTY" xml:space="preserve">
+        <value>Роль обязательна для ввода</value>
     </data>
 </root>
