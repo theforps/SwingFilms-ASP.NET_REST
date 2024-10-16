@@ -11,12 +11,27 @@ public sealed record ParameterDto
     public string Genre { get; init; }
     
     /// <summary>
-    /// Год
-    /// </summary>
-    public string Year { get; init; }
-    
-    /// <summary>
-    /// Тип фильма
+    /// Тип
     /// </summary>
     public string Type { get; init; }
+    
+    /// <summary>
+    /// Минимальный рейтинг
+    /// </summary>
+    public int MinRate { get; init; }
+    
+    /// <summary>
+    /// Максимальный рейтинг
+    /// </summary>
+    public int MaxRate { get; init; }
+    
+    /// <summary>
+    /// Минимальный год
+    /// </summary>
+    public int MinYear { get; init; }
+    
+    /// <summary>
+    /// Максимальный год
+    /// </summary>
+    public int MaxYear { get; init; }
 }

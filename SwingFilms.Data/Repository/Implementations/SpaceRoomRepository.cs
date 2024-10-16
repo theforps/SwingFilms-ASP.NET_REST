@@ -60,7 +60,10 @@ public class SpaceRoomRepository : ISpaceRoomRepository
 
         spaceRoom.Parameter.Genre = parameter.Genre;
         spaceRoom.Parameter.Type = parameter.Type;
-        spaceRoom.Parameter.Year = parameter.Year;
+        spaceRoom.Parameter.MinRate = parameter.MinRate;
+        spaceRoom.Parameter.MaxRate = parameter.MaxRate;
+        spaceRoom.Parameter.MinYear = parameter.MinYear;
+        spaceRoom.Parameter.MaxYear = parameter.MaxYear;
 
         await _dataContext.SaveChangesAsync(cancellationToken);
     }
